@@ -73,6 +73,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Users"
   "/users/create":
@@ -207,6 +211,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Autopayments"
   "/balance":
@@ -217,6 +225,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Balance"
   "/balance/transactions":
@@ -239,6 +251,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Balance"
   "/balance/export":
@@ -337,6 +353,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Cards"
   "/cards/create":
@@ -554,6 +574,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Cards"
   "/cashboxes":
@@ -570,6 +594,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Cashboxes"
   "/cashboxes/create":
@@ -636,6 +664,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Messages"
   "/purchases":
@@ -702,6 +734,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Purchases"
   "/purchases/create":
@@ -807,6 +843,33 @@
             "type": "string"
       "responses":
         "200":
+          "description": ""
+      "tags":
+        - "Purchases"
+  "/purchases/upload":
+    "post":
+      "operationId": "PurchasesController_uploadFile"
+      "summary": "Прикрепление чека"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "comment":
+                  "type": "string"
+                "purchaseId":
+                  "type": "number"
+                "file":
+                  "type": "string"
+                  "format": "binary"
+              "required":
+                - "purchaseId"
+                - "file"
+      "responses":
+        "201":
           "description": ""
       "tags":
         - "Purchases"
@@ -917,6 +980,10 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
       "tags":
         - "Transactions"
   "/transactions/create":
@@ -1368,6 +1435,19 @@
       "required":
         - "purchaseId"
         - "status"
+    "PurchaseUploadDto":
+      "type": "object"
+      "properties":
+        "comment":
+          "type": "string"
+        "purchaseId":
+          "type": "number"
+        "file":
+          "type": "string"
+          "format": "binary"
+      "required":
+        - "purchaseId"
+        - "file"
     "Reference":
       "type": "object"
       "properties": {}
