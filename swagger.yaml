@@ -126,6 +126,67 @@
                 "properties": {}
       "tags":
         - "Users"
+  "/users/edit":
+    "patch":
+      "operationId": "UsersController_editUser"
+      "summary": "Редактирование пользователя"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "userId":
+                  "type": "number"
+                "name":
+                  "type": "string"
+                "email":
+                  "type": "string"
+                "password":
+                  "type": "string"
+                  "minLength": 3
+                  "maxLength": 16
+                "role":
+                  "type": "string"
+                  "enum":
+                    - "admin"
+                    - "operator"
+                    - "trader"
+                    - "merchant"
+              "required":
+                - "userId"
+                - "name"
+                - "email"
+                - "password"
+                - "role"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Users"
+  "/users/delete/{id}":
+    "delete":
+      "operationId": "UsersController_deleteUser"
+      "summary": "Удаление пользователя"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Users"
   "/autopayments":
     "get":
       "operationId": "AutopaymentsController_getAutopayments"
@@ -794,19 +855,25 @@
       "summary": "Получение списка сделок"
       "parameters":
         -
-          "name": "status"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "number"
-        -
           "name": "transactionId"
           "required": false
           "in": "query"
           "schema":
             "type": "number"
         -
-          "name": "cardNumberAndTitle"
+          "name": "status"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "title"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "cardNumber"
           "required": false
           "in": "query"
           "schema":
@@ -817,6 +884,30 @@
           "in": "query"
           "schema":
             "type": "number"
+        -
+          "name": "orderNumber"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "clientNumber"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "cashbox"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "dateEnd"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
         -
           "name": "page"
           "required": false
@@ -841,6 +932,12 @@
             "schema":
               "type": "object"
               "properties":
+                "orderNumber":
+                  "type": "number"
+                "cashbox":
+                  "type": "number"
+                "clientNumber":
+                  "type": "string"
                 "isSbp":
                   "type": "boolean"
                 "bankType":
@@ -848,6 +945,9 @@
                 "amount":
                   "type": "number"
               "required":
+                - "orderNumber"
+                - "cashbox"
+                - "clientNumber"
                 - "bankType"
                 - "amount"
       "responses":
@@ -950,6 +1050,12 @@
       "summary": "Получение списка сделок в формате Excel"
       "parameters":
         -
+          "name": "cashbox"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
           "name": "dateStart"
           "required": true
           "in": "query"
@@ -961,6 +1067,12 @@
           "in": "query"
           "schema":
             "type": "string"
+        -
+          "name": "status"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
       "responses":
         "200":
           "description": ""
@@ -1028,6 +1140,32 @@
         - "password"
         - "role"
         - "permissions"
+    "UserEditDto":
+      "type": "object"
+      "properties":
+        "userId":
+          "type": "number"
+        "name":
+          "type": "string"
+        "email":
+          "type": "string"
+        "password":
+          "type": "string"
+          "minLength": 3
+          "maxLength": 16
+        "role":
+          "type": "string"
+          "enum":
+            - "admin"
+            - "operator"
+            - "trader"
+            - "merchant"
+      "required":
+        - "userId"
+        - "name"
+        - "email"
+        - "password"
+        - "role"
     "ConfigDto":
       "type": "object"
       "properties":
@@ -1236,6 +1374,12 @@
     "TransactionCreateDto":
       "type": "object"
       "properties":
+        "orderNumber":
+          "type": "number"
+        "cashbox":
+          "type": "number"
+        "clientNumber":
+          "type": "string"
         "isSbp":
           "type": "boolean"
         "bankType":
@@ -1243,6 +1387,9 @@
         "amount":
           "type": "number"
       "required":
+        - "orderNumber"
+        - "cashbox"
+        - "clientNumber"
         - "bankType"
         - "amount"
     "TransactionEditDto":
