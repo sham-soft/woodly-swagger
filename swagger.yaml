@@ -73,10 +73,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Users"
   "/users/create":
@@ -211,10 +207,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Autopayments"
   "/balance":
@@ -225,10 +217,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Balance"
   "/balance/transactions":
@@ -353,10 +341,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Cards"
   "/cards/create":
@@ -574,10 +558,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Cards"
   "/cashboxes":
@@ -594,10 +574,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Cashboxes"
   "/cashboxes/create":
@@ -626,6 +602,8 @@
                   "type": "string"
                 "commissionPayer":
                   "type": "number"
+                "apiKey":
+                  "type": "string"
               "required":
                 - "title"
                 - "url"
@@ -636,6 +614,39 @@
                 - "commissionPayer"
       "responses":
         "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/change-status":
+    "patch":
+      "operationId": "CashboxesController_changeStatusCard"
+      "summary": "Активация кассы. Деактивация кассы."
+      "description": "\n                    - Чтобы активировать кассу, нужно передать status = 1.\n                    - Чтобы деактивировать карту, нужно передать status = 2.\n"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "cashboxId":
+                  "type": "number"
+                "status":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+              "required":
+                - "cashboxId"
+                - "status"
+      "responses":
+        "200":
           "description": ""
           "content":
             "application/json":
@@ -664,10 +675,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Messages"
   "/purchases":
@@ -734,10 +741,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Purchases"
   "/purchases/create":
@@ -980,10 +983,6 @@
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
       "tags":
         - "Transactions"
   "/transactions/create":
@@ -1026,40 +1025,6 @@
                 "type": "object"
       "tags":
         - "Transactions"
-  "/transactions/edit":
-    "patch":
-      "operationId": "TransactionsController_editTransaction"
-      "summary": "Подтверждение сделки. Отклонить проверку. Корректировка заявки"
-      "description": "\n                    - Чтобы подтвердить сделку, нужно передать status = 4.\n                    - Чтобы отклонить сделку, нужно передать status = 3.\n                    - Чтобы корректировать заявку, нужно передать поле amount.\n"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "transactionId":
-                  "type": "number"
-                "cardId":
-                  "type": "number"
-                "status":
-                  "type": "number"
-                "amount":
-                  "type": "number"
-              "required":
-                - "transactionId"
-                - "cardId"
-      "responses":
-        "200":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
-      "tags":
-        - "Transactions"
   "/transactions/make":
     "patch":
       "operationId": "TransactionsController_makeTransaction"
@@ -1091,9 +1056,9 @@
                 "type": "string"
       "tags":
         - "Transactions"
-  "/transactions/confirm/{id}":
+  "/transactions/check-status/{id}":
     "get":
-      "operationId": "TransactionsController_confirmTransaction"
+      "operationId": "TransactionsController_checkStatusTransaction"
       "summary": "Проверка статуса сделки (для лендинга)"
       "parameters":
         -
@@ -1109,6 +1074,80 @@
             "application/json":
               "schema":
                 "type": "string"
+      "tags":
+        - "Transactions"
+  "/transactions/edit":
+    "patch":
+      "operationId": "TransactionsController_editTransaction"
+      "summary": "Корректировка заявки"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "transactionId":
+                  "type": "number"
+                "cardId":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+              "required":
+                - "transactionId"
+                - "cardId"
+                - "amount"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/confirm/{id}":
+    "patch":
+      "operationId": "TransactionsController_confirmTransaction"
+      "summary": "Подтвердить сделку"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/cancel/{id}":
+    "patch":
+      "operationId": "TransactionsController_cancelTransaction"
+      "summary": "Отклонить сделку"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
       "tags":
         - "Transactions"
   "/transactions/export":
@@ -1384,6 +1423,8 @@
           "type": "string"
         "commissionPayer":
           "type": "number"
+        "apiKey":
+          "type": "string"
       "required":
         - "title"
         - "url"
@@ -1395,6 +1436,19 @@
     "Cashbox":
       "type": "object"
       "properties": {}
+    "CashboxChangeStatusDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "status":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+      "required":
+        - "cashboxId"
+        - "status"
     "PurchaseCreateDto":
       "type": "object"
       "properties":
@@ -1472,23 +1526,6 @@
         - "clientNumber"
         - "bankType"
         - "amount"
-    "TransactionEditDto":
-      "type": "object"
-      "properties":
-        "transactionId":
-          "type": "number"
-        "cardId":
-          "type": "number"
-        "status":
-          "type": "number"
-        "amount":
-          "type": "number"
-      "required":
-        - "transactionId"
-        - "cardId"
-    "Transaction":
-      "type": "object"
-      "properties": {}
     "TransactionMakeDto":
       "type": "object"
       "properties":
@@ -1501,6 +1538,22 @@
       "required":
         - "cardLastNumber"
         - "message"
+    "TransactionEditDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
+        "cardId":
+          "type": "number"
+        "amount":
+          "type": "number"
+      "required":
+        - "transactionId"
+        - "cardId"
+        - "amount"
+    "Transaction":
+      "type": "object"
+      "properties": {}
 "security":
   -
     "bearer": []
