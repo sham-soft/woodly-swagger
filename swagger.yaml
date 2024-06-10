@@ -59,6 +59,34 @@
                 "properties": {}
       "tags":
         - "Auth"
+  "/auth/transactions-flag":
+    "get":
+      "operationId": "AuthController_getTransactionsFlag"
+      "summary": "Получение статуса фалга сделки"
+      "parameters": []
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "boolean"
+      "tags":
+        - "Auth"
+  "/auth/switch-transactions-flag":
+    "patch":
+      "operationId": "AuthController_switchTransactionsFlag"
+      "summary": "Включение/Отключение флага сделки"
+      "parameters": []
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "boolean"
+      "tags":
+        - "Auth"
   "/users":
     "get":
       "operationId": "UsersController_getAllUsers"
@@ -365,18 +393,31 @@
                   "type": "string"
                 "bankType":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
                 "processMethod":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
                 "currency":
-                  "type": "number"
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
                 "deviceId":
                   "type": "string"
                 "apiKey":
                   "type": "string"
                 "slotSim":
                   "type": "number"
-                "isQiwi":
-                  "type": "boolean"
+                  "enum":
+                    - 1
+                    - 2
                 "isSbp":
                   "type": "boolean"
                 "phone":
@@ -393,7 +434,6 @@
                 - "deviceId"
                 - "apiKey"
                 - "slotSim"
-                - "isQiwi"
                 - "isSbp"
       "responses":
         "201":
@@ -602,6 +642,9 @@
                   "type": "string"
                 "commissionPayer":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
                 "apiKey":
                   "type": "string"
               "required":
@@ -622,37 +665,36 @@
                 "properties": {}
       "tags":
         - "Cashboxes"
-  "/cashboxes/change-status":
+  "/cashboxes/activate/{id}":
     "patch":
-      "operationId": "CashboxesController_changeStatusCard"
-      "summary": "Активация кассы. Деактивация кассы."
-      "description": "\n                    - Чтобы активировать кассу, нужно передать status = 1.\n                    - Чтобы деактивировать карту, нужно передать status = 2.\n"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "cashboxId":
-                  "type": "number"
-                "status":
-                  "type": "number"
-                  "enum":
-                    - 1
-                    - 2
-              "required":
-                - "cashboxId"
-                - "status"
+      "operationId": "CashboxesController_activateCashbox"
+      "summary": "Активация кассы"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/deactivate/{id}":
+    "patch":
+      "operationId": "CashboxesController_deactivateCashbox"
+      "summary": "Деактивация кассы"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
       "tags":
         - "Cashboxes"
   "/messages":
@@ -759,14 +801,24 @@
                   "type": "number"
                 "paymentSystem":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
                 "bankType":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
                 "amount":
                   "type": "number"
                 "orderNumber":
                   "type": "number"
                 "currency":
-                  "type": "number"
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
                 "requisites":
                   "type": "string"
                   "minLength": 11
@@ -789,34 +841,52 @@
                 "properties": {}
       "tags":
         - "Purchases"
-  "/purchases/change-status":
+  "/purchases/activate/{id}":
     "patch":
-      "operationId": "PurchasesController_changeStatusCard"
-      "summary": "Принять сделку. Отменить сделку. Подтвердить сделку"
-      "description": "\n                    - Чтобы принять сделку, нужно передать status = 2.\n                    - Чтобы отменить сделку, нужно передать status = 3.\n                    - Чтобы подтвердить сделку, нужно передать status = 4.\n"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "purchaseId":
-                  "type": "number"
-                "status":
-                  "type": "number"
-              "required":
-                - "purchaseId"
-                - "status"
+      "operationId": "PurchasesController_activatePurchase"
+      "summary": "Принять сделку"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
       "responses":
         "200":
           "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
+      "tags":
+        - "Purchases"
+  "/purchases/confirm/{id}":
+    "patch":
+      "operationId": "PurchasesController_confirmPurchase"
+      "summary": "Подтвердить сделку"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Purchases"
+  "/purchases/cancel/{id}":
+    "patch":
+      "operationId": "PurchasesController_cancelPurchase"
+      "summary": "Отменить сделку"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
       "tags":
         - "Purchases"
   "/purchases/export":
@@ -918,7 +988,7 @@
   "/transactions":
     "get":
       "operationId": "TransactionsController_getTransactions"
-      "summary": "Получение списка сделок"
+      "summary": "Получение списка платежей"
       "parameters":
         -
           "name": "transactionId"
@@ -988,8 +1058,7 @@
   "/transactions/create":
     "post":
       "operationId": "TransactionsController_createTransaction"
-      "summary": "Создание сделки и получение реквизитов оплаты (для лендинга)"
-      "description": "bankType можно не передавать, если передано поле isSbp"
+      "summary": "Создание платежа"
       "parameters": []
       "requestBody":
         "required": true
@@ -1002,20 +1071,62 @@
                   "type": "number"
                 "cashbox":
                   "type": "number"
+                "paymentSystem":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                "amount":
+                  "type": "number"
                 "clientNumber":
                   "type": "string"
+              "required":
+                - "orderNumber"
+                - "cashbox"
+                - "paymentSystem"
+                - "currency"
+                - "amount"
+                - "clientNumber"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/activate":
+    "post":
+      "operationId": "TransactionsController_activateTransaction"
+      "summary": "Активация платежа и получение реквизитов оплаты (для экрана оплаты)"
+      "description": "bankType можно не передавать, если передано поле isSbp"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "transactionId":
+                  "type": "number"
                 "isSbp":
                   "type": "boolean"
                 "bankType":
                   "type": "number"
-                "amount":
-                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
               "required":
-                - "orderNumber"
-                - "cashbox"
-                - "clientNumber"
+                - "transactionId"
                 - "bankType"
-                - "amount"
       "responses":
         "201":
           "description": ""
@@ -1028,7 +1139,7 @@
   "/transactions/make":
     "patch":
       "operationId": "TransactionsController_makeTransaction"
-      "summary": "Подтверждение сделки чат-ботом (для чат-бота)"
+      "summary": "Подтверждение платежа чат-ботом (для чат-бота)"
       "description": "Отправление данных чат-ботом в сервис, после получения платежа на телефон"
       "parameters": []
       "requestBody":
@@ -1059,7 +1170,7 @@
   "/transactions/check-status/{id}":
     "get":
       "operationId": "TransactionsController_checkStatusTransaction"
-      "summary": "Проверка статуса сделки (для лендинга)"
+      "summary": "Проверка статуса платежа (для экрана оплаты)"
       "parameters":
         -
           "name": "id"
@@ -1111,7 +1222,7 @@
   "/transactions/confirm/{id}":
     "patch":
       "operationId": "TransactionsController_confirmTransaction"
-      "summary": "Подтвердить сделку"
+      "summary": "Подтвердить платеж"
       "parameters":
         -
           "name": "id"
@@ -1132,7 +1243,7 @@
   "/transactions/cancel/{id}":
     "patch":
       "operationId": "TransactionsController_cancelTransaction"
-      "summary": "Отклонить сделку"
+      "summary": "Отклонить платеж"
       "parameters":
         -
           "name": "id"
@@ -1153,7 +1264,7 @@
   "/transactions/export":
     "get":
       "operationId": "TransactionsController_getTransactionsExport"
-      "summary": "Получение списка сделок в формате Excel"
+      "summary": "Получение списка платежей в формате Excel"
       "parameters":
         -
           "name": "cashbox"
@@ -1298,18 +1409,31 @@
           "type": "string"
         "bankType":
           "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
         "processMethod":
           "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
         "currency":
-          "type": "number"
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
         "deviceId":
           "type": "string"
         "apiKey":
           "type": "string"
         "slotSim":
           "type": "number"
-        "isQiwi":
-          "type": "boolean"
+          "enum":
+            - 1
+            - 2
         "isSbp":
           "type": "boolean"
         "phone":
@@ -1326,7 +1450,6 @@
         - "deviceId"
         - "apiKey"
         - "slotSim"
-        - "isQiwi"
         - "isSbp"
     "Card":
       "type": "object"
@@ -1423,6 +1546,9 @@
           "type": "string"
         "commissionPayer":
           "type": "number"
+          "enum":
+            - 1
+            - 2
         "apiKey":
           "type": "string"
       "required":
@@ -1436,19 +1562,6 @@
     "Cashbox":
       "type": "object"
       "properties": {}
-    "CashboxChangeStatusDto":
-      "type": "object"
-      "properties":
-        "cashboxId":
-          "type": "number"
-        "status":
-          "type": "number"
-          "enum":
-            - 1
-            - 2
-      "required":
-        - "cashboxId"
-        - "status"
     "PurchaseCreateDto":
       "type": "object"
       "properties":
@@ -1456,14 +1569,24 @@
           "type": "number"
         "paymentSystem":
           "type": "number"
+          "enum":
+            - 1
+            - 2
         "bankType":
           "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
         "amount":
           "type": "number"
         "orderNumber":
           "type": "number"
         "currency":
-          "type": "number"
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
         "requisites":
           "type": "string"
           "minLength": 11
@@ -1479,16 +1602,6 @@
     "Purchase":
       "type": "object"
       "properties": {}
-    "PurchaseChangeStatusDto":
-      "type": "object"
-      "properties":
-        "purchaseId":
-          "type": "number"
-        "status":
-          "type": "number"
-      "required":
-        - "purchaseId"
-        - "status"
     "PurchaseUploadDto":
       "type": "object"
       "properties":
@@ -1512,20 +1625,45 @@
           "type": "number"
         "cashbox":
           "type": "number"
+        "paymentSystem":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+        "amount":
+          "type": "number"
         "clientNumber":
           "type": "string"
+      "required":
+        - "orderNumber"
+        - "cashbox"
+        - "paymentSystem"
+        - "currency"
+        - "amount"
+        - "clientNumber"
+    "Transaction":
+      "type": "object"
+      "properties": {}
+    "TransactionActivateDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
         "isSbp":
           "type": "boolean"
         "bankType":
           "type": "number"
-        "amount":
-          "type": "number"
+          "enum":
+            - 1
+            - 2
       "required":
-        - "orderNumber"
-        - "cashbox"
-        - "clientNumber"
+        - "transactionId"
         - "bankType"
-        - "amount"
     "TransactionMakeDto":
       "type": "object"
       "properties":
@@ -1551,9 +1689,6 @@
         - "transactionId"
         - "cardId"
         - "amount"
-    "Transaction":
-      "type": "object"
-      "properties": {}
 "security":
   -
     "bearer": []
