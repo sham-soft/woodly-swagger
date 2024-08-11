@@ -1118,6 +1118,66 @@
                 "properties": {}
       "tags":
         - "Transactions"
+  "/transactions/verify":
+    "patch":
+      "operationId": "TransactionsController_verifyTransaction"
+      "summary": "Отправить на проверку"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "multipart/form-data":
+            "schema":
+              "type": "object"
+              "properties":
+                "file":
+                  "type": "string"
+                  "format": "binary"
+                "transactionId":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+              "required":
+                - "file"
+                - "transactionId"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/approve":
+    "patch":
+      "operationId": "TransactionsController_approveTransaction"
+      "summary": "Зачислить платеж"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "transactionId":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+              "required":
+                - "transactionId"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
   "/transactions/export":
     "get":
       "operationId": "TransactionsController_getTransactionsExport"
@@ -1628,6 +1688,40 @@
                 "properties": {}
       "tags":
         - "References"
+  "/statistics/transactions":
+    "get":
+      "operationId": "StatisticsController_getTransactions"
+      "summary": "Получение статистики"
+      "parameters":
+        -
+          "name": "name"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "dateStart"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "dateEnd"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "page"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Statistics"
 "info":
   "title": "Woodly"
   "description": "The woodly API description"
@@ -1933,6 +2027,28 @@
         - "transactionId"
         - "cardId"
         - "amount"
+    "TransactionVerifyDto":
+      "type": "object"
+      "properties":
+        "file":
+          "type": "string"
+          "format": "binary"
+        "transactionId":
+          "type": "number"
+        "amount":
+          "type": "number"
+      "required":
+        - "file"
+        - "transactionId"
+    "TransactionApproveDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
+        "amount":
+          "type": "number"
+      "required":
+        - "transactionId"
     "InternalTransferSendDto":
       "type": "object"
       "properties":
