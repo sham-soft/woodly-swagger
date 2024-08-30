@@ -422,7 +422,6 @@
               - "1"
               - "2"
               - "3"
-              - "4"
             "type": "string"
         -
           "name": "page"
@@ -537,8 +536,6 @@
                   "type": "string"
                 "cardNumber":
                   "type": "string"
-                  "minLength": 16
-                  "maxLength": 16
                 "fio":
                   "type": "string"
                 "bankType":
@@ -569,7 +566,9 @@
                   "enum":
                     - 1
                     - 2
-                "isSbp":
+                "isTransferCardNumber":
+                  "type": "boolean"
+                "isTransferSbp":
                   "type": "boolean"
                 "phone":
                   "type": "string"
@@ -585,7 +584,8 @@
                 - "deviceId"
                 - "apiKey"
                 - "slotSim"
-                - "isSbp"
+                - "isTransferCardNumber"
+                - "isTransferSbp"
       "responses":
         "201":
           "description": ""
@@ -614,8 +614,6 @@
                   "type": "string"
                 "cardNumber":
                   "type": "string"
-                  "minLength": 16
-                  "maxLength": 16
                 "fio":
                   "type": "string"
                 "bankType":
@@ -646,7 +644,9 @@
                   "enum":
                     - 1
                     - 2
-                "isSbp":
+                "isTransferCardNumber":
+                  "type": "boolean"
+                "isTransferSbp":
                   "type": "boolean"
                 "phone":
                   "type": "string"
@@ -663,7 +663,8 @@
                 - "deviceId"
                 - "apiKey"
                 - "slotSim"
-                - "isSbp"
+                - "isTransferCardNumber"
+                - "isTransferSbp"
       "responses":
         "200":
           "description": ""
@@ -760,17 +761,11 @@
           "description": ""
       "tags":
         - "Cards"
-  "/cards/{id}/transactions":
+  "/cashboxes":
     "get":
-      "operationId": "CardsController_getCardTransactions"
-      "summary": "Получение сделок по определенной карте"
+      "operationId": "CashboxesController_getCashboxes"
+      "summary": "Получение списка касс"
       "parameters":
-        -
-          "name": "id"
-          "required": true
-          "in": "path"
-          "schema":
-            "type": "number"
         -
           "name": "page"
           "required": false
@@ -781,7 +776,134 @@
         "200":
           "description": ""
       "tags":
-        - "Cards"
+        - "Cashboxes"
+  "/cashboxes/create":
+    "post":
+      "operationId": "CashboxesController_createCard"
+      "summary": "Создание кассы"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "title":
+                  "type": "string"
+                "url":
+                  "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
+                "notificationUrlPayOff":
+                  "type": "string"
+                "commissionPayer":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                "apiKey":
+                  "type": "string"
+              "required":
+                - "title"
+                - "url"
+                - "successUrl"
+                - "errorUrl"
+                - "notificationUrlPayments"
+                - "notificationUrlPayOff"
+                - "commissionPayer"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/activate/{id}":
+    "patch":
+      "operationId": "CashboxesController_activateCashbox"
+      "summary": "Активация кассы"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/deactivate/{id}":
+    "patch":
+      "operationId": "CashboxesController_deactivateCashbox"
+      "summary": "Деактивация кассы"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/edit-tariff":
+    "patch":
+      "operationId": "CashboxesController_editTariff"
+      "summary": "Редактирование тарифа кассы"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "cashboxId":
+                  "type": "number"
+                "tariffId":
+                  "type": "string"
+                  "enum":
+                    - "p2p"
+                    - "sbp_transaction"
+                    - "trc20"
+                    - "usdt_trc20"
+                    - "bank"
+                    - "sbp_purchase"
+                    - "trx"
+                    - "piastrix"
+                "limitMin":
+                  "type": "number"
+                "limitMax":
+                  "type": "number"
+                "commissionPercent":
+                  "type": "number"
+                "commissionAmount":
+                  "type": "number"
+              "required":
+                - "cashboxId"
+                - "tariffId"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Cashboxes"
   "/transactions":
     "get":
       "operationId": "TransactionsController_getTransactions"
@@ -1159,149 +1281,6 @@
           "description": ""
       "tags":
         - "Transactions"
-  "/cashboxes":
-    "get":
-      "operationId": "CashboxesController_getCashboxes"
-      "summary": "Получение списка касс"
-      "parameters":
-        -
-          "name": "page"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "number"
-      "responses":
-        "200":
-          "description": ""
-      "tags":
-        - "Cashboxes"
-  "/cashboxes/create":
-    "post":
-      "operationId": "CashboxesController_createCard"
-      "summary": "Создание кассы"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "title":
-                  "type": "string"
-                "url":
-                  "type": "string"
-                "successUrl":
-                  "type": "string"
-                "errorUrl":
-                  "type": "string"
-                "notificationUrlPayments":
-                  "type": "string"
-                "notificationUrlPayOff":
-                  "type": "string"
-                "commissionPayer":
-                  "type": "number"
-                  "enum":
-                    - 1
-                    - 2
-                "apiKey":
-                  "type": "string"
-              "required":
-                - "title"
-                - "url"
-                - "successUrl"
-                - "errorUrl"
-                - "notificationUrlPayments"
-                - "notificationUrlPayOff"
-                - "commissionPayer"
-      "responses":
-        "201":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
-      "tags":
-        - "Cashboxes"
-  "/cashboxes/activate/{id}":
-    "patch":
-      "operationId": "CashboxesController_activateCashbox"
-      "summary": "Активация кассы"
-      "parameters":
-        -
-          "name": "id"
-          "required": true
-          "in": "path"
-          "schema":
-            "type": "number"
-      "responses":
-        "200":
-          "description": ""
-      "tags":
-        - "Cashboxes"
-  "/cashboxes/deactivate/{id}":
-    "patch":
-      "operationId": "CashboxesController_deactivateCashbox"
-      "summary": "Деактивация кассы"
-      "parameters":
-        -
-          "name": "id"
-          "required": true
-          "in": "path"
-          "schema":
-            "type": "number"
-      "responses":
-        "200":
-          "description": ""
-      "tags":
-        - "Cashboxes"
-  "/cashboxes/edit-tariff":
-    "patch":
-      "operationId": "CashboxesController_editTariff"
-      "summary": "Редактирование тарифа кассы"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "cashboxId":
-                  "type": "number"
-                "tariffId":
-                  "type": "string"
-                  "enum":
-                    - "p2p"
-                    - "sbp_transaction"
-                    - "trc20"
-                    - "usdt_trc20"
-                    - "bank"
-                    - "sbp_purchase"
-                    - "trx"
-                    - "piastrix"
-                "limitMin":
-                  "type": "number"
-                "limitMax":
-                  "type": "number"
-                "commissionPercent":
-                  "type": "number"
-                "commissionAmount":
-                  "type": "number"
-              "required":
-                - "cashboxId"
-                - "tariffId"
-      "responses":
-        "200":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
-      "tags":
-        - "Cashboxes"
   "/messages":
     "get":
       "operationId": "MessagesController_getMessages"
@@ -1745,6 +1724,22 @@
           "description": ""
       "tags":
         - "Withdrawals"
+  "/withdrawals/cancel/{id}":
+    "patch":
+      "operationId": "WithdrawalsController_cancelWithdrawal"
+      "summary": "Отклонить вывод"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Withdrawals"
 "info":
   "title": "Woodly"
   "description": "The woodly API description"
@@ -1879,8 +1874,6 @@
           "type": "string"
         "cardNumber":
           "type": "string"
-          "minLength": 16
-          "maxLength": 16
         "fio":
           "type": "string"
         "bankType":
@@ -1911,7 +1904,9 @@
           "enum":
             - 1
             - 2
-        "isSbp":
+        "isTransferCardNumber":
+          "type": "boolean"
+        "isTransferSbp":
           "type": "boolean"
         "phone":
           "type": "string"
@@ -1927,7 +1922,8 @@
         - "deviceId"
         - "apiKey"
         - "slotSim"
-        - "isSbp"
+        - "isTransferCardNumber"
+        - "isTransferSbp"
     "Card":
       "type": "object"
       "properties": {}
@@ -1940,8 +1936,6 @@
           "type": "string"
         "cardNumber":
           "type": "string"
-          "minLength": 16
-          "maxLength": 16
         "fio":
           "type": "string"
         "bankType":
@@ -1972,7 +1966,9 @@
           "enum":
             - 1
             - 2
-        "isSbp":
+        "isTransferCardNumber":
+          "type": "boolean"
+        "isTransferSbp":
           "type": "boolean"
         "phone":
           "type": "string"
@@ -1989,7 +1985,8 @@
         - "deviceId"
         - "apiKey"
         - "slotSim"
-        - "isSbp"
+        - "isTransferCardNumber"
+        - "isTransferSbp"
     "CardSetLimitDto":
       "type": "object"
       "properties":
@@ -2009,6 +2006,66 @@
         - "transactionsLimitPerDay"
         - "paymentMin"
         - "paymentMax"
+    "CashboxCreateDto":
+      "type": "object"
+      "properties":
+        "title":
+          "type": "string"
+        "url":
+          "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
+        "notificationUrlPayOff":
+          "type": "string"
+        "commissionPayer":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+        "apiKey":
+          "type": "string"
+      "required":
+        - "title"
+        - "url"
+        - "successUrl"
+        - "errorUrl"
+        - "notificationUrlPayments"
+        - "notificationUrlPayOff"
+        - "commissionPayer"
+    "Cashbox":
+      "type": "object"
+      "properties": {}
+    "CashboxEditTariffDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "tariffId":
+          "type": "string"
+          "enum":
+            - "p2p"
+            - "sbp_transaction"
+            - "trc20"
+            - "usdt_trc20"
+            - "bank"
+            - "sbp_purchase"
+            - "trx"
+            - "piastrix"
+        "limitMin":
+          "type": "number"
+        "limitMax":
+          "type": "number"
+        "commissionPercent":
+          "type": "number"
+        "commissionAmount":
+          "type": "number"
+      "required":
+        - "cashboxId"
+        - "tariffId"
     "TransactionCreateDto":
       "type": "object"
       "properties":
@@ -2103,66 +2160,6 @@
           "type": "number"
       "required":
         - "transactionId"
-    "CashboxCreateDto":
-      "type": "object"
-      "properties":
-        "title":
-          "type": "string"
-        "url":
-          "type": "string"
-        "successUrl":
-          "type": "string"
-        "errorUrl":
-          "type": "string"
-        "notificationUrlPayments":
-          "type": "string"
-        "notificationUrlPayOff":
-          "type": "string"
-        "commissionPayer":
-          "type": "number"
-          "enum":
-            - 1
-            - 2
-        "apiKey":
-          "type": "string"
-      "required":
-        - "title"
-        - "url"
-        - "successUrl"
-        - "errorUrl"
-        - "notificationUrlPayments"
-        - "notificationUrlPayOff"
-        - "commissionPayer"
-    "Cashbox":
-      "type": "object"
-      "properties": {}
-    "CashboxEditTariffDto":
-      "type": "object"
-      "properties":
-        "cashboxId":
-          "type": "number"
-        "tariffId":
-          "type": "string"
-          "enum":
-            - "p2p"
-            - "sbp_transaction"
-            - "trc20"
-            - "usdt_trc20"
-            - "bank"
-            - "sbp_purchase"
-            - "trx"
-            - "piastrix"
-        "limitMin":
-          "type": "number"
-        "limitMax":
-          "type": "number"
-        "commissionPercent":
-          "type": "number"
-        "commissionAmount":
-          "type": "number"
-      "required":
-        - "cashboxId"
-        - "tariffId"
     "PurchaseCreateDto":
       "type": "object"
       "properties":
