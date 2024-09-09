@@ -56,7 +56,6 @@
             "application/json":
               "schema":
                 "type": "object"
-                "properties": {}
       "tags":
         - "Auth"
   "/auth/profile/edit":
@@ -214,13 +213,14 @@
                   "type": "string"
                   "minLength": 3
                   "maxLength": 16
-                "role":
+                "permissions":
+                  "type": "array"
+                  "items":
+                    "type": "string"
+                "address":
                   "type": "string"
-                  "enum":
-                    - "admin"
-                    - "operator"
-                    - "trader"
-                    - "merchant"
+                "referrerPercent":
+                  "type": "number"
               "required":
                 - "userId"
       "responses":
@@ -233,10 +233,10 @@
                 "properties": {}
       "tags":
         - "Users"
-  "/users/delete/{id}":
-    "delete":
-      "operationId": "UsersController_deleteUser"
-      "summary": "Удаление пользователя"
+  "/users/activate/{id}":
+    "patch":
+      "operationId": "UsersController_activateUser"
+      "summary": "Активация пользователя"
       "parameters":
         -
           "name": "id"
@@ -247,6 +247,32 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Users"
+  "/users/deactivate/{id}":
+    "patch":
+      "operationId": "UsersController_deactivateUser"
+      "summary": "Деактивация пользователя"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
       "tags":
         - "Users"
   "/users/edit-tariff":
@@ -499,9 +525,15 @@
           "in": "query"
           "schema":
             "enum":
-              - "1"
-              - "2"
-              - "3"
+              - 1
+              - 2
+              - 3
+            "type": "number"
+        -
+          "name": "title"
+          "required": false
+          "in": "query"
+          "schema":
             "type": "string"
         -
           "name": "cardNumber"
@@ -544,6 +576,45 @@
                     - 1
                     - 2
                     - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
                 "processMethod":
                   "type": "number"
                   "enum":
@@ -622,6 +693,45 @@
                     - 1
                     - 2
                     - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
                 "processMethod":
                   "type": "number"
                   "enum":
@@ -970,6 +1080,30 @@
           "schema":
             "type": "string"
         -
+          "name": "currency"
+          "required": false
+          "in": "query"
+          "schema":
+            "enum":
+              - "rub"
+              - "kzt"
+              - "rub-trx"
+            "type": "string"
+        -
+          "name": "paymentSystem"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "array"
+            "items":
+              "type": "number"
+        -
+          "name": "search"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "page"
           "required": false
           "in": "query"
@@ -1075,6 +1209,8 @@
             "schema":
               "type": "object"
               "properties":
+                "deviceId":
+                  "type": "string"
                 "cardLastNumber":
                   "type": "string"
                 "amount":
@@ -1082,6 +1218,7 @@
                 "message":
                   "type": "string"
               "required":
+                - "deviceId"
                 - "cardLastNumber"
                 - "message"
       "responses":
@@ -1275,7 +1412,13 @@
           "required": false
           "in": "query"
           "schema":
-            "type": "number"
+            "enum":
+              - "1"
+              - "2"
+              - "3"
+              - "4"
+              - "5"
+            "type": "string"
       "responses":
         "200":
           "description": ""
@@ -1349,6 +1492,45 @@
               - "1"
               - "2"
               - "3"
+              - "4"
+              - "5"
+              - "6"
+              - "7"
+              - "8"
+              - "9"
+              - "10"
+              - "11"
+              - "12"
+              - "13"
+              - "14"
+              - "15"
+              - "16"
+              - "17"
+              - "18"
+              - "19"
+              - "20"
+              - "21"
+              - "22"
+              - "23"
+              - "24"
+              - "25"
+              - "26"
+              - "27"
+              - "28"
+              - "29"
+              - "30"
+              - "31"
+              - "32"
+              - "33"
+              - "34"
+              - "35"
+              - "36"
+              - "37"
+              - "38"
+              - "39"
+              - "40"
+              - "41"
+              - "42"
             "type": "string"
         -
           "name": "cashboxId"
@@ -1403,6 +1585,45 @@
                     - 1
                     - 2
                     - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
                 "amount":
                   "type": "number"
                 "orderNumber":
@@ -1486,6 +1707,11 @@
       "responses":
         "200":
           "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
       "tags":
         - "Purchases"
   "/purchases/export":
@@ -1562,14 +1788,14 @@
                   "properties": {}
       "tags":
         - "References"
-  "/references/{name}":
+  "/references/{key}":
     "get":
       "operationId": "ReferencesController_getReference"
       "summary": "Получение справочника"
       "description": "\n                    - Список статусов карт - card-statuses.\n                    - Список статусов продаж - transaction-statuses.\n                    - Список статусов для баланса - balance-statuses.\n                    - Список статусов покупок - purchase-statuses.\n                    - Список типов банков - bank-types.\n                    - Список способов оплаты - payment-systems.\n"
       "parameters":
         -
-          "name": "name"
+          "name": "key"
           "required": true
           "in": "path"
           "schema":
@@ -1768,9 +1994,6 @@
       "required":
         - "login"
         - "password"
-    "User":
-      "type": "object"
-      "properties": {}
     "ProfileEditDto":
       "type": "object"
       "properties":
@@ -1821,6 +2044,9 @@
         - "address"
         - "referrerId"
         - "referrerPercent"
+    "User":
+      "type": "object"
+      "properties": {}
     "UserEditDto":
       "type": "object"
       "properties":
@@ -1834,13 +2060,14 @@
           "type": "string"
           "minLength": 3
           "maxLength": 16
-        "role":
+        "permissions":
+          "type": "array"
+          "items":
+            "type": "string"
+        "address":
           "type": "string"
-          "enum":
-            - "admin"
-            - "operator"
-            - "trader"
-            - "merchant"
+        "referrerPercent":
+          "type": "number"
       "required":
         - "userId"
     "UserEditTariffDto":
@@ -1882,6 +2109,45 @@
             - 1
             - 2
             - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
         "processMethod":
           "type": "number"
           "enum":
@@ -1944,6 +2210,45 @@
             - 1
             - 2
             - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
         "processMethod":
           "type": "number"
           "enum":
@@ -2116,6 +2421,8 @@
     "TransactionMakeDto":
       "type": "object"
       "properties":
+        "deviceId":
+          "type": "string"
         "cardLastNumber":
           "type": "string"
         "amount":
@@ -2123,6 +2430,7 @@
         "message":
           "type": "string"
       "required":
+        - "deviceId"
         - "cardLastNumber"
         - "message"
     "TransactionEditDto":
@@ -2176,6 +2484,45 @@
             - 1
             - 2
             - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
         "amount":
           "type": "number"
         "orderNumber":
