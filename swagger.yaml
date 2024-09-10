@@ -120,6 +120,23 @@
       "summary": "Получение списка всех пользователей"
       "parameters":
         -
+          "name": "role"
+          "required": false
+          "in": "query"
+          "schema":
+            "enum":
+              - "admin"
+              - "operator"
+              - "trader"
+              - "merchant"
+            "type": "string"
+        -
+          "name": "login"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "page"
           "required": false
           "in": "query"
@@ -1016,7 +1033,7 @@
         - "Cashboxes"
   "/transactions":
     "get":
-      "operationId": "TransactionsController_getTransactions"
+      "operationId": "TransactionsController_getAllTransactions"
       "summary": "Получение списка платежей"
       "parameters":
         -
@@ -1112,6 +1129,39 @@
       "responses":
         "200":
           "description": ""
+      "tags":
+        - "Transactions"
+  "/transactions/{id}":
+    "get":
+      "operationId": "TransactionsController_getTransaction"
+      "summary": "Получение платежа (для экрана оплаты)"
+      "parameters":
+        -
+          "name": "id"
+          "required": true
+          "in": "path"
+          "schema":
+            "type": "number"
+        -
+          "name": "status"
+          "required": false
+          "in": "query"
+          "schema":
+            "enum":
+              - "1"
+              - "2"
+              - "3"
+              - "4"
+              - "5"
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
       "tags":
         - "Transactions"
   "/transactions/create":
@@ -1792,7 +1842,7 @@
     "get":
       "operationId": "ReferencesController_getReference"
       "summary": "Получение справочника"
-      "description": "\n                    - Список статусов карт - card-statuses.\n                    - Список статусов продаж - transaction-statuses.\n                    - Список статусов для баланса - balance-statuses.\n                    - Список статусов покупок - purchase-statuses.\n                    - Список типов банков - bank-types.\n                    - Список способов оплаты - payment-systems.\n"
+      "description": "\n                    - Список статусов карт - ???\n                    - Список статусов продаж - ???\n                    - Список статусов для баланса - ???\n                    - Список статусов покупок - ???\n                    - Список типов банков - bankTypes\n                    - Список способов оплаты - ???\n"
       "parameters":
         -
           "name": "key"
@@ -2371,6 +2421,9 @@
       "required":
         - "cashboxId"
         - "tariffId"
+    "Transaction":
+      "type": "object"
+      "properties": {}
     "TransactionCreateDto":
       "type": "object"
       "properties":
@@ -2400,9 +2453,6 @@
         - "currency"
         - "amount"
         - "clientNumber"
-    "Transaction":
-      "type": "object"
-      "properties": {}
     "TransactionActivateDto":
       "type": "object"
       "properties":
