@@ -120,6 +120,18 @@
       "summary": "Получение списка всех пользователей"
       "parameters":
         -
+          "name": "userId"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "name"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "role"
           "required": false
           "in": "query"
@@ -132,6 +144,12 @@
             "type": "string"
         -
           "name": "login"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "search"
           "required": false
           "in": "query"
           "schema":
@@ -401,7 +419,7 @@
         - "Balance"
   "/balance/operations":
     "get":
-      "operationId": "BalanceOperationsController_getAllWithdrawals"
+      "operationId": "BalanceOperationsController_getAllBalanceOperations"
       "summary": "Получение операций баланса"
       "parameters":
         -
@@ -457,6 +475,19 @@
               - "9"
             "type": "string"
         -
+          "name": "entity"
+          "required": false
+          "in": "query"
+          "schema":
+            "enum":
+              - "1"
+              - "2"
+              - "3"
+              - "4"
+              - "5"
+              - "6"
+            "type": "string"
+        -
           "name": "type"
           "required": false
           "in": "query"
@@ -465,6 +496,12 @@
               - "1"
               - "2"
               - "3"
+            "type": "string"
+        -
+          "name": "search"
+          "required": false
+          "in": "query"
+          "schema":
             "type": "string"
         -
           "name": "page"
@@ -894,6 +931,12 @@
       "summary": "Получение списка касс"
       "parameters":
         -
+          "name": "search"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "page"
           "required": false
           "in": "query"
@@ -1002,14 +1045,10 @@
                 "tariffId":
                   "type": "string"
                   "enum":
-                    - "p2p"
                     - "sbp_transaction"
-                    - "trc20"
                     - "usdt_trc20"
                     - "bank"
                     - "sbp_purchase"
-                    - "trx"
-                    - "piastrix"
                 "limitMin":
                   "type": "number"
                 "limitMax":
@@ -1067,7 +1106,13 @@
           "schema":
             "type": "string"
         -
-          "name": "amount"
+          "name": "amountStart"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "amountEnd"
           "required": false
           "in": "query"
           "schema":
@@ -1091,6 +1136,12 @@
           "schema":
             "type": "number"
         -
+          "name": "dateStart"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "dateEnd"
           "required": false
           "in": "query"
@@ -1107,13 +1158,13 @@
               - "rub-trx"
             "type": "string"
         -
-          "name": "paymentSystem"
+          "name": "cashboxTariffId"
           "required": false
           "in": "query"
           "schema":
             "type": "array"
             "items":
-              "type": "number"
+              "type": "string"
         -
           "name": "search"
           "required": false
@@ -1180,11 +1231,13 @@
                   "type": "number"
                 "cashboxId":
                   "type": "number"
-                "paymentSystem":
-                  "type": "number"
+                "cashboxTariffId":
+                  "type": "string"
                   "enum":
-                    - 1
-                    - 2
+                    - "sbp_transaction"
+                    - "usdt_trc20"
+                    - "bank"
+                    - "sbp_purchase"
                 "currency":
                   "type": "string"
                   "enum":
@@ -1198,7 +1251,7 @@
               "required":
                 - "orderNumber"
                 - "cashboxId"
-                - "paymentSystem"
+                - "cashboxTariffId"
                 - "currency"
                 - "amount"
                 - "clientNumber"
@@ -1508,13 +1561,13 @@
           "schema":
             "type": "number"
         -
-          "name": "paymentSystem"
+          "name": "cashboxTariffId"
           "required": false
           "in": "query"
           "schema":
             "type": "array"
             "items":
-              "type": "number"
+              "type": "string"
         -
           "name": "requisites"
           "required": false
@@ -1522,7 +1575,25 @@
           "schema":
             "type": "string"
         -
-          "name": "amount"
+          "name": "dateStart"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "dateEnd"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "amountStart"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "amountEnd"
           "required": false
           "in": "query"
           "schema":
@@ -1600,6 +1671,12 @@
               - "4"
             "type": "string"
         -
+          "name": "search"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "page"
           "required": false
           "in": "query"
@@ -1624,11 +1701,13 @@
               "properties":
                 "cashboxId":
                   "type": "number"
-                "paymentSystem":
-                  "type": "number"
+                "cashboxTariffId":
+                  "type": "string"
                   "enum":
-                    - 1
-                    - 2
+                    - "sbp_transaction"
+                    - "usdt_trc20"
+                    - "bank"
+                    - "sbp_purchase"
                 "bankType":
                   "type": "number"
                   "enum":
@@ -1690,7 +1769,7 @@
                   "maxLength": 16
               "required":
                 - "cashboxId"
-                - "paymentSystem"
+                - "cashboxTariffId"
                 - "bankType"
                 - "amount"
                 - "orderNumber"
@@ -1842,7 +1921,7 @@
     "get":
       "operationId": "ReferencesController_getReference"
       "summary": "Получение справочника"
-      "description": "\n                    - Список статусов карт - ???\n                    - Список статусов продаж - ???\n                    - Список статусов для баланса - ???\n                    - Список статусов покупок - ???\n                    - Список типов банков - bankTypes\n                    - Список способов оплаты - ???\n"
+      "description": "\n                    - Список типов банков - bankTypes\n                    - Список плательщиков комиссии - comissionPayers\n                    - Список методов обработки - processMethods\n"
       "parameters":
         -
           "name": "key"
@@ -1926,9 +2005,48 @@
                   "type": "number"
                 "amount":
                   "type": "number"
+                "isCashbox":
+                  "type": "boolean"
+                "comment":
+                  "type": "string"
               "required":
                 - "recipientId"
                 - "amount"
+                - "isCashbox"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Internal Transfers"
+  "/internal-transfers/withdraw":
+    "post":
+      "operationId": "InternalTransfersController_withdrawMoney"
+      "summary": "Списание средств"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "recipientId":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+                "isCashbox":
+                  "type": "boolean"
+                "comment":
+                  "type": "string"
+              "required":
+                - "recipientId"
+                - "amount"
+                - "isCashbox"
       "responses":
         "201":
           "description": ""
@@ -2402,14 +2520,10 @@
         "tariffId":
           "type": "string"
           "enum":
-            - "p2p"
             - "sbp_transaction"
-            - "trc20"
             - "usdt_trc20"
             - "bank"
             - "sbp_purchase"
-            - "trx"
-            - "piastrix"
         "limitMin":
           "type": "number"
         "limitMax":
@@ -2431,11 +2545,13 @@
           "type": "number"
         "cashboxId":
           "type": "number"
-        "paymentSystem":
-          "type": "number"
+        "cashboxTariffId":
+          "type": "string"
           "enum":
-            - 1
-            - 2
+            - "sbp_transaction"
+            - "usdt_trc20"
+            - "bank"
+            - "sbp_purchase"
         "currency":
           "type": "string"
           "enum":
@@ -2449,7 +2565,7 @@
       "required":
         - "orderNumber"
         - "cashboxId"
-        - "paymentSystem"
+        - "cashboxTariffId"
         - "currency"
         - "amount"
         - "clientNumber"
@@ -2523,11 +2639,13 @@
       "properties":
         "cashboxId":
           "type": "number"
-        "paymentSystem":
-          "type": "number"
+        "cashboxTariffId":
+          "type": "string"
           "enum":
-            - 1
-            - 2
+            - "sbp_transaction"
+            - "usdt_trc20"
+            - "bank"
+            - "sbp_purchase"
         "bankType":
           "type": "number"
           "enum":
@@ -2589,7 +2707,7 @@
           "maxLength": 16
       "required":
         - "cashboxId"
-        - "paymentSystem"
+        - "cashboxTariffId"
         - "bankType"
         - "amount"
         - "orderNumber"
@@ -2614,19 +2732,39 @@
     "Reference":
       "type": "object"
       "properties": {}
-    "InternalTransferSendDto":
+    "SendDto":
       "type": "object"
       "properties":
         "recipientId":
           "type": "number"
         "amount":
           "type": "number"
+        "isCashbox":
+          "type": "boolean"
+        "comment":
+          "type": "string"
       "required":
         - "recipientId"
         - "amount"
+        - "isCashbox"
     "InternalTransfer":
       "type": "object"
       "properties": {}
+    "WithdrawDto":
+      "type": "object"
+      "properties":
+        "recipientId":
+          "type": "number"
+        "amount":
+          "type": "number"
+        "isCashbox":
+          "type": "boolean"
+        "comment":
+          "type": "string"
+      "required":
+        - "recipientId"
+        - "amount"
+        - "isCashbox"
     "WithdrawalCreateDto":
       "type": "object"
       "properties":
