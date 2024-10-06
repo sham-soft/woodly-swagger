@@ -2142,7 +2142,7 @@
 "tags": []
 "servers":
   -
-    "url": "https://woodly-azure.vercel.app/"
+    "url": "https://woodly-alpha.vercel.app/"
   -
     "url": "http://localhost:3000/"
 "components":
