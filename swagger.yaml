@@ -32,6 +32,8 @@
                   "type": "string"
                 "password":
                   "type": "string"
+                "recaptha":
+                  "type": "string"
               "required":
                 - "login"
                 - "password"
@@ -191,7 +193,6 @@
                 "role":
                   "type": "string"
                   "enum":
-                    - "admin"
                     - "operator"
                     - "trader"
                     - "merchant"
@@ -214,7 +215,6 @@
                 - "role"
                 - "permissions"
                 - "address"
-                - "referrerId"
                 - "referrerPercent"
       "responses":
         "201":
@@ -536,22 +536,6 @@
           "description": ""
       "tags":
         - "Balance"
-  "/currencies":
-    "get":
-      "operationId": "CurrenciesController_getAllCurrencies"
-      "summary": "Получение списка всех валют"
-      "parameters":
-        -
-          "name": "page"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "number"
-      "responses":
-        "200":
-          "description": ""
-      "tags":
-        - "Currencies"
   "/transfers":
     "get":
       "operationId": "TransfersController_getAllTransfers"
@@ -568,6 +552,22 @@
           "description": ""
       "tags":
         - "Transfers"
+  "/currencies":
+    "get":
+      "operationId": "CurrenciesController_getAllCurrencies"
+      "summary": "Получение списка всех валют"
+      "parameters":
+        -
+          "name": "page"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Currencies"
   "/cards":
     "get":
       "operationId": "CardsController_getCards"
@@ -686,11 +686,6 @@
                   "type": "string"
                 "apiKey":
                   "type": "string"
-                "slotSim":
-                  "type": "number"
-                  "enum":
-                    - 1
-                    - 2
                 "isTransferCardNumber":
                   "type": "boolean"
                 "isTransferSbp":
@@ -708,7 +703,6 @@
                 - "currency"
                 - "deviceId"
                 - "apiKey"
-                - "slotSim"
                 - "isTransferCardNumber"
                 - "isTransferSbp"
       "responses":
@@ -803,11 +797,6 @@
                   "type": "string"
                 "apiKey":
                   "type": "string"
-                "slotSim":
-                  "type": "number"
-                  "enum":
-                    - 1
-                    - 2
                 "isTransferCardNumber":
                   "type": "boolean"
                 "isTransferSbp":
@@ -826,7 +815,6 @@
                 - "currency"
                 - "deviceId"
                 - "apiKey"
-                - "slotSim"
                 - "isTransferCardNumber"
                 - "isTransferSbp"
       "responses":
@@ -949,7 +937,7 @@
         - "Cashboxes"
   "/cashboxes/create":
     "post":
-      "operationId": "CashboxesController_createCard"
+      "operationId": "CashboxesController_createCashbox"
       "summary": "Создание кассы"
       "parameters": []
       "requestBody":
@@ -986,6 +974,51 @@
                 - "notificationUrlPayments"
                 - "notificationUrlPayOff"
                 - "commissionPayer"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Cashboxes"
+  "/cashboxes/edit":
+    "post":
+      "operationId": "CashboxesController_editCashbox"
+      "summary": "Редактирование кассы"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "cashboxId":
+                  "type": "number"
+                "title":
+                  "type": "string"
+                "url":
+                  "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
+                "notificationUrlPayOff":
+                  "type": "string"
+                "commissionPayer":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                "apiKey":
+                  "type": "string"
+              "required":
+                - "cashboxId"
       "responses":
         "201":
           "description": ""
@@ -1045,10 +1078,9 @@
                 "tariffId":
                   "type": "string"
                   "enum":
-                    - "sbp_transaction"
-                    - "usdt_trc20"
                     - "bank"
-                    - "sbp_purchase"
+                    - "sbp"
+                    - "usdt_trc20"
                 "limitMin":
                   "type": "number"
                 "limitMax":
@@ -1070,6 +1102,156 @@
                 "properties": {}
       "tags":
         - "Cashboxes"
+  "/transactions/find-requisite":
+    "post":
+      "operationId": "TransactionsController_findRequisite"
+      "summary": "Создание платежа и получение реквизитов (для экрана оплаты)"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "recaptha":
+                  "type": "string"
+                "orderNumber":
+                  "type": "number"
+                "cashboxId":
+                  "type": "number"
+                "paymentSystem":
+                  "type": "string"
+                  "enum":
+                    - "bank"
+                    - "sbp"
+                    - "usdt_trc20"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "amount":
+                  "type": "number"
+                "clientNumber":
+                  "type": "string"
+              "required":
+                - "orderNumber"
+                - "cashboxId"
+                - "paymentSystem"
+                - "currency"
+                - "amount"
+                - "clientNumber"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/check":
+    "get":
+      "operationId": "TransactionsController_checkTransaction"
+      "summary": "Проверка платежа (для экрана оплаты)"
+      "parameters":
+        -
+          "name": "orderNumber"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "cashboxId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "amount"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "transactionId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "paymentSystem"
+          "required": true
+          "in": "query"
+          "schema":
+            "enum":
+              - "bank"
+              - "sbp"
+              - "usdt_trc20"
+            "type": "string"
+        -
+          "name": "currency"
+          "required": true
+          "in": "query"
+          "schema":
+            "enum":
+              - "rub"
+              - "kzt"
+              - "rub-trx"
+            "type": "string"
+        -
+          "name": "clientNumber"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
+  "/transactions/make":
+    "patch":
+      "operationId": "TransactionsController_makeTransaction"
+      "summary": "Подтверждение платежа чат-ботом (для чат-бота)"
+      "description": "Отправление данных чат-ботом в сервис, после получения платежа на телефон"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "deviceId":
+                  "type": "string"
+                "cardLastNumber":
+                  "type": "string"
+                "amount":
+                  "type": "number"
+                "message":
+                  "type": "string"
+              "required":
+                - "deviceId"
+                - "cardLastNumber"
+                - "message"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "string"
+      "tags":
+        - "Transactions"
   "/transactions":
     "get":
       "operationId": "TransactionsController_getAllTransactions"
@@ -1158,7 +1340,7 @@
               - "rub-trx"
             "type": "string"
         -
-          "name": "cashboxTariffId"
+          "name": "paymentSystem"
           "required": false
           "in": "query"
           "schema":
@@ -1182,39 +1364,6 @@
           "description": ""
       "tags":
         - "Transactions"
-  "/transactions/{id}":
-    "get":
-      "operationId": "TransactionsController_getTransaction"
-      "summary": "Получение платежа (для экрана оплаты)"
-      "parameters":
-        -
-          "name": "id"
-          "required": true
-          "in": "path"
-          "schema":
-            "type": "number"
-        -
-          "name": "status"
-          "required": false
-          "in": "query"
-          "schema":
-            "enum":
-              - "1"
-              - "2"
-              - "3"
-              - "4"
-              - "5"
-            "type": "string"
-      "responses":
-        "200":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-                "properties": {}
-      "tags":
-        - "Transactions"
   "/transactions/create":
     "post":
       "operationId": "TransactionsController_createTransaction"
@@ -1231,13 +1380,12 @@
                   "type": "number"
                 "cashboxId":
                   "type": "number"
-                "cashboxTariffId":
+                "paymentSystem":
                   "type": "string"
                   "enum":
-                    - "sbp_transaction"
-                    - "usdt_trc20"
                     - "bank"
-                    - "sbp_purchase"
+                    - "sbp"
+                    - "usdt_trc20"
                 "currency":
                   "type": "string"
                   "enum":
@@ -1251,7 +1399,7 @@
               "required":
                 - "orderNumber"
                 - "cashboxId"
-                - "cashboxTariffId"
+                - "paymentSystem"
                 - "currency"
                 - "amount"
                 - "clientNumber"
@@ -1263,94 +1411,6 @@
               "schema":
                 "type": "object"
                 "properties": {}
-      "tags":
-        - "Transactions"
-  "/transactions/activate":
-    "post":
-      "operationId": "TransactionsController_activateTransaction"
-      "summary": "Активация платежа и получение реквизитов оплаты (для экрана оплаты)"
-      "description": "bankType можно не передавать, если передано поле isSbp"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "transactionId":
-                  "type": "number"
-                "isSbp":
-                  "type": "boolean"
-                "bankType":
-                  "type": "number"
-                  "enum":
-                    - 1
-                    - 2
-              "required":
-                - "transactionId"
-                - "bankType"
-      "responses":
-        "201":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "object"
-      "tags":
-        - "Transactions"
-  "/transactions/make":
-    "patch":
-      "operationId": "TransactionsController_makeTransaction"
-      "summary": "Подтверждение платежа чат-ботом (для чат-бота)"
-      "description": "Отправление данных чат-ботом в сервис, после получения платежа на телефон"
-      "parameters": []
-      "requestBody":
-        "required": true
-        "content":
-          "application/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "deviceId":
-                  "type": "string"
-                "cardLastNumber":
-                  "type": "string"
-                "amount":
-                  "type": "number"
-                "message":
-                  "type": "string"
-              "required":
-                - "deviceId"
-                - "cardLastNumber"
-                - "message"
-      "responses":
-        "200":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "string"
-      "tags":
-        - "Transactions"
-  "/transactions/check-status/{id}":
-    "get":
-      "operationId": "TransactionsController_checkStatusTransaction"
-      "summary": "Проверка статуса платежа (для экрана оплаты)"
-      "parameters":
-        -
-          "name": "id"
-          "required": true
-          "in": "path"
-          "schema":
-            "type": "string"
-      "responses":
-        "200":
-          "description": ""
-          "content":
-            "application/json":
-              "schema":
-                "type": "string"
       "tags":
         - "Transactions"
   "/transactions/edit":
@@ -1561,7 +1621,7 @@
           "schema":
             "type": "number"
         -
-          "name": "cashboxTariffId"
+          "name": "paymentSystem"
           "required": false
           "in": "query"
           "schema":
@@ -1701,13 +1761,12 @@
               "properties":
                 "cashboxId":
                   "type": "number"
-                "cashboxTariffId":
+                "paymentSystem":
                   "type": "string"
                   "enum":
-                    - "sbp_transaction"
-                    - "usdt_trc20"
                     - "bank"
-                    - "sbp_purchase"
+                    - "sbp"
+                    - "usdt_trc20"
                 "bankType":
                   "type": "number"
                   "enum":
@@ -1766,10 +1825,9 @@
                 "requisites":
                   "type": "string"
                   "minLength": 11
-                  "maxLength": 16
               "required":
                 - "cashboxId"
-                - "cashboxTariffId"
+                - "paymentSystem"
                 - "bankType"
                 - "amount"
                 - "orderNumber"
@@ -1921,7 +1979,7 @@
     "get":
       "operationId": "ReferencesController_getReference"
       "summary": "Получение справочника"
-      "description": "\n                    - Список типов банков - bankTypes\n                    - Список плательщиков комиссии - comissionPayers\n                    - Список методов обработки - processMethods\n"
+      "description": "\n                    - Список типов банков - bankTypes\n                    - Список плательщиков комиссии - paymentSystems\n                    - Список плательщиков комиссии - comissionPayers\n                    - Список методов обработки - processMethods\n                    - Список ролей - roles\n                    - Список доступов - permissions\n"
       "parameters":
         -
           "name": "key"
@@ -2159,6 +2217,8 @@
           "type": "string"
         "password":
           "type": "string"
+        "recaptha":
+          "type": "string"
       "required":
         - "login"
         - "password"
@@ -2187,7 +2247,6 @@
         "role":
           "type": "string"
           "enum":
-            - "admin"
             - "operator"
             - "trader"
             - "merchant"
@@ -2210,7 +2269,6 @@
         - "role"
         - "permissions"
         - "address"
-        - "referrerId"
         - "referrerPercent"
     "User":
       "type": "object"
@@ -2333,11 +2391,6 @@
           "type": "string"
         "apiKey":
           "type": "string"
-        "slotSim":
-          "type": "number"
-          "enum":
-            - 1
-            - 2
         "isTransferCardNumber":
           "type": "boolean"
         "isTransferSbp":
@@ -2355,7 +2408,6 @@
         - "currency"
         - "deviceId"
         - "apiKey"
-        - "slotSim"
         - "isTransferCardNumber"
         - "isTransferSbp"
     "Card":
@@ -2434,11 +2486,6 @@
           "type": "string"
         "apiKey":
           "type": "string"
-        "slotSim":
-          "type": "number"
-          "enum":
-            - 1
-            - 2
         "isTransferCardNumber":
           "type": "boolean"
         "isTransferSbp":
@@ -2457,7 +2504,6 @@
         - "currency"
         - "deviceId"
         - "apiKey"
-        - "slotSim"
         - "isTransferCardNumber"
         - "isTransferSbp"
     "CardSetLimitDto":
@@ -2479,7 +2525,7 @@
         - "transactionsLimitPerDay"
         - "paymentMin"
         - "paymentMax"
-    "CashboxCreateDto":
+    "CreateDto":
       "type": "object"
       "properties":
         "title":
@@ -2512,7 +2558,33 @@
     "Cashbox":
       "type": "object"
       "properties": {}
-    "CashboxEditTariffDto":
+    "EditDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "title":
+          "type": "string"
+        "url":
+          "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
+        "notificationUrlPayOff":
+          "type": "string"
+        "commissionPayer":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+        "apiKey":
+          "type": "string"
+      "required":
+        - "cashboxId"
+    "EditTariffDto":
       "type": "object"
       "properties":
         "cashboxId":
@@ -2520,10 +2592,9 @@
         "tariffId":
           "type": "string"
           "enum":
-            - "sbp_transaction"
-            - "usdt_trc20"
             - "bank"
-            - "sbp_purchase"
+            - "sbp"
+            - "usdt_trc20"
         "limitMin":
           "type": "number"
         "limitMax":
@@ -2535,23 +2606,21 @@
       "required":
         - "cashboxId"
         - "tariffId"
-    "Transaction":
-      "type": "object"
-      "properties": {}
-    "TransactionCreateDto":
+    "FindRequisiteDto":
       "type": "object"
       "properties":
+        "recaptha":
+          "type": "string"
         "orderNumber":
           "type": "number"
         "cashboxId":
           "type": "number"
-        "cashboxTariffId":
+        "paymentSystem":
           "type": "string"
           "enum":
-            - "sbp_transaction"
-            - "usdt_trc20"
             - "bank"
-            - "sbp_purchase"
+            - "sbp"
+            - "usdt_trc20"
         "currency":
           "type": "string"
           "enum":
@@ -2565,25 +2634,13 @@
       "required":
         - "orderNumber"
         - "cashboxId"
-        - "cashboxTariffId"
+        - "paymentSystem"
         - "currency"
         - "amount"
         - "clientNumber"
-    "TransactionActivateDto":
+    "Transaction":
       "type": "object"
-      "properties":
-        "transactionId":
-          "type": "number"
-        "isSbp":
-          "type": "boolean"
-        "bankType":
-          "type": "number"
-          "enum":
-            - 1
-            - 2
-      "required":
-        - "transactionId"
-        - "bankType"
+      "properties": {}
     "TransactionMakeDto":
       "type": "object"
       "properties":
@@ -2599,6 +2656,36 @@
         - "deviceId"
         - "cardLastNumber"
         - "message"
+    "TransactionCreateDto":
+      "type": "object"
+      "properties":
+        "orderNumber":
+          "type": "number"
+        "cashboxId":
+          "type": "number"
+        "paymentSystem":
+          "type": "string"
+          "enum":
+            - "bank"
+            - "sbp"
+            - "usdt_trc20"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "amount":
+          "type": "number"
+        "clientNumber":
+          "type": "string"
+      "required":
+        - "orderNumber"
+        - "cashboxId"
+        - "paymentSystem"
+        - "currency"
+        - "amount"
+        - "clientNumber"
     "TransactionEditDto":
       "type": "object"
       "properties":
@@ -2639,13 +2726,12 @@
       "properties":
         "cashboxId":
           "type": "number"
-        "cashboxTariffId":
+        "paymentSystem":
           "type": "string"
           "enum":
-            - "sbp_transaction"
-            - "usdt_trc20"
             - "bank"
-            - "sbp_purchase"
+            - "sbp"
+            - "usdt_trc20"
         "bankType":
           "type": "number"
           "enum":
@@ -2704,10 +2790,9 @@
         "requisites":
           "type": "string"
           "minLength": 11
-          "maxLength": 16
       "required":
         - "cashboxId"
-        - "cashboxTariffId"
+        - "paymentSystem"
         - "bankType"
         - "amount"
         - "orderNumber"
