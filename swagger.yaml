@@ -129,6 +129,21 @@
           "description": ""
       "tags":
         - "Autopayments"
+  "/balances/balance":
+    "get":
+      "operationId": "BalancesController_getBalances"
+      "summary": "Получение баланса"
+      "parameters": []
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Balances"
   "/balance":
     "get":
       "operationId": "BalanceOperationsController_getBalance"
@@ -336,13 +351,88 @@
             "schema":
               "type": "object"
               "properties":
-                "address":
+                "title":
                   "type": "string"
-                "amount":
+                "cardNumber":
+                  "type": "string"
+                "fio":
+                  "type": "string"
+                "bankType":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
+                    - 43
+                "processMethod":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "isTransferCardNumber":
+                  "type": "boolean"
+                "isTransferSbp":
+                  "type": "boolean"
+                "phone":
+                  "type": "string"
+                "recipient":
+                  "type": "string"
               "required":
-                - "address"
-                - "amount"
+                - "title"
+                - "cardNumber"
+                - "fio"
+                - "bankType"
+                - "processMethod"
+                - "currency"
+                - "isTransferCardNumber"
+                - "isTransferSbp"
       "responses":
         "201":
           "description": ""
@@ -365,26 +455,94 @@
             "schema":
               "type": "object"
               "properties":
-                "userId":
+                "cardId":
                   "type": "number"
-                "name":
+                "title":
                   "type": "string"
-                "email":
+                "cardNumber":
                   "type": "string"
-                "password":
+                "fio":
                   "type": "string"
-                  "minLength": 3
-                  "maxLength": 16
-                "permissions":
-                  "type": "array"
-                  "items":
-                    "type": "string"
-                "address":
-                  "type": "string"
-                "referrerPercent":
+                "bankType":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
+                    - 43
+                "processMethod":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "deviceId":
+                  "type": "number"
+                "isTransferCardNumber":
+                  "type": "boolean"
+                "isTransferSbp":
+                  "type": "boolean"
+                "phone":
+                  "type": "string"
+                "recipient":
+                  "type": "string"
               "required":
-                - "userId"
+                - "cardId"
+                - "title"
+                - "cardNumber"
+                - "fio"
+                - "bankType"
+                - "processMethod"
+                - "currency"
+                - "deviceId"
+                - "isTransferCardNumber"
+                - "isTransferSbp"
       "responses":
         "200":
           "description": ""
@@ -513,13 +671,31 @@
             "schema":
               "type": "object"
               "properties":
-                "address":
+                "title":
                   "type": "string"
-                "amount":
+                "url":
+                  "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
+                "notificationUrlPayOff":
+                  "type": "string"
+                "commissionPayer":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
               "required":
-                - "address"
-                - "amount"
+                - "title"
+                - "url"
+                - "successUrl"
+                - "errorUrl"
+                - "notificationUrlPayments"
+                - "notificationUrlPayOff"
+                - "commissionPayer"
       "responses":
         "201":
           "description": ""
@@ -542,26 +718,29 @@
             "schema":
               "type": "object"
               "properties":
-                "userId":
+                "cashboxId":
                   "type": "number"
-                "name":
+                "title":
                   "type": "string"
-                "email":
+                "url":
                   "type": "string"
-                "password":
+                "successUrl":
                   "type": "string"
-                  "minLength": 3
-                  "maxLength": 16
-                "permissions":
-                  "type": "array"
-                  "items":
-                    "type": "string"
-                "address":
+                "errorUrl":
                   "type": "string"
-                "referrerPercent":
+                "notificationUrlPayments":
+                  "type": "string"
+                "notificationUrlPayOff":
+                  "type": "string"
+                "commissionPayer":
                   "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                "apiKey":
+                  "type": "string"
               "required":
-                - "userId"
+                - "cashboxId"
       "responses":
         "201":
           "description": ""
@@ -840,13 +1019,81 @@
             "schema":
               "type": "object"
               "properties":
-                "address":
+                "cashboxId":
+                  "type": "number"
+                "paymentSystem":
                   "type": "string"
+                  "enum":
+                    - "bank"
+                    - "sbp"
+                    - "usdt_trc20"
+                "bankType":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                    - 6
+                    - 7
+                    - 8
+                    - 9
+                    - 10
+                    - 11
+                    - 12
+                    - 13
+                    - 14
+                    - 15
+                    - 16
+                    - 17
+                    - 18
+                    - 19
+                    - 20
+                    - 21
+                    - 22
+                    - 23
+                    - 24
+                    - 25
+                    - 26
+                    - 27
+                    - 28
+                    - 29
+                    - 30
+                    - 31
+                    - 32
+                    - 33
+                    - 34
+                    - 35
+                    - 36
+                    - 37
+                    - 38
+                    - 39
+                    - 40
+                    - 41
+                    - 42
+                    - 43
                 "amount":
                   "type": "number"
+                "orderNumber":
+                  "type": "number"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "requisites":
+                  "type": "string"
+                  "minLength": 11
               "required":
-                - "address"
+                - "cashboxId"
+                - "paymentSystem"
+                - "bankType"
                 - "amount"
+                - "orderNumber"
+                - "currency"
+                - "requisites"
       "responses":
         "201":
           "description": ""
@@ -1302,13 +1549,33 @@
             "schema":
               "type": "object"
               "properties":
-                "address":
+                "orderNumber":
+                  "type": "number"
+                "cashboxId":
+                  "type": "number"
+                "paymentSystem":
                   "type": "string"
+                  "enum":
+                    - "bank"
+                    - "sbp"
+                    - "usdt_trc20"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
                 "amount":
                   "type": "number"
+                "clientNumber":
+                  "type": "string"
               "required":
-                - "address"
+                - "orderNumber"
+                - "cashboxId"
+                - "paymentSystem"
+                - "currency"
                 - "amount"
+                - "clientNumber"
       "responses":
         "201":
           "description": ""
@@ -1331,26 +1598,13 @@
             "schema":
               "type": "object"
               "properties":
-                "userId":
+                "transactionId":
                   "type": "number"
-                "name":
-                  "type": "string"
-                "email":
-                  "type": "string"
-                "password":
-                  "type": "string"
-                  "minLength": 3
-                  "maxLength": 16
-                "permissions":
-                  "type": "array"
-                  "items":
-                    "type": "string"
-                "address":
-                  "type": "string"
-                "referrerPercent":
+                "amount":
                   "type": "number"
               "required":
-                - "userId"
+                - "transactionId"
+                - "amount"
       "responses":
         "200":
           "description": ""
@@ -1610,13 +1864,41 @@
             "schema":
               "type": "object"
               "properties":
+                "name":
+                  "type": "string"
+                "email":
+                  "type": "string"
+                "login":
+                  "type": "string"
+                "password":
+                  "type": "string"
+                  "minLength": 3
+                  "maxLength": 16
+                "role":
+                  "type": "string"
+                  "enum":
+                    - "operator"
+                    - "trader"
+                    - "merchant"
+                "permissions":
+                  "type": "array"
+                  "items":
+                    "type": "string"
                 "address":
                   "type": "string"
-                "amount":
+                "referrerId":
+                  "type": "number"
+                  "minimum": 1
+                "referrerPercent":
                   "type": "number"
               "required":
-                - "address"
-                - "amount"
+                - "name"
+                - "email"
+                - "login"
+                - "password"
+                - "role"
+                - "permissions"
+                - "referrerPercent"
       "responses":
         "201":
           "description": ""
@@ -1956,7 +2238,7 @@
       "bearerFormat": "JWT"
       "type": "http"
   "schemas":
-    "SignInDto":
+    "SignInAuthDto":
       "type": "object"
       "properties":
         "login":
@@ -1971,7 +2253,7 @@
     "User":
       "type": "object"
       "properties": {}
-    "ProfileEditDto":
+    "ProfileEditAuthDto":
       "type": "object"
       "properties":
         "email":
@@ -1984,43 +2266,189 @@
           "type": "string"
         "telegramContact":
           "type": "string"
-    "CreateDto":
+    "Balance":
+      "type": "object"
+      "properties": {}
+    "CreateCardDto":
       "type": "object"
       "properties":
-        "address":
+        "title":
           "type": "string"
-        "amount":
+        "cardNumber":
+          "type": "string"
+        "fio":
+          "type": "string"
+        "bankType":
           "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
+            - 43
+        "processMethod":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "isTransferCardNumber":
+          "type": "boolean"
+        "isTransferSbp":
+          "type": "boolean"
+        "phone":
+          "type": "string"
+        "recipient":
+          "type": "string"
       "required":
-        - "address"
-        - "amount"
+        - "title"
+        - "cardNumber"
+        - "fio"
+        - "bankType"
+        - "processMethod"
+        - "currency"
+        - "isTransferCardNumber"
+        - "isTransferSbp"
     "Card":
       "type": "object"
       "properties": {}
-    "EditDto":
+    "EditCardDto":
       "type": "object"
       "properties":
-        "userId":
+        "cardId":
           "type": "number"
-        "name":
+        "title":
           "type": "string"
-        "email":
+        "cardNumber":
           "type": "string"
-        "password":
+        "fio":
           "type": "string"
-          "minLength": 3
-          "maxLength": 16
-        "permissions":
-          "type": "array"
-          "items":
-            "type": "string"
-        "address":
-          "type": "string"
-        "referrerPercent":
+        "bankType":
           "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
+            - 43
+        "processMethod":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "deviceId":
+          "type": "number"
+        "isTransferCardNumber":
+          "type": "boolean"
+        "isTransferSbp":
+          "type": "boolean"
+        "phone":
+          "type": "string"
+        "recipient":
+          "type": "string"
       "required":
-        - "userId"
-    "SetLimitDto":
+        - "cardId"
+        - "title"
+        - "cardNumber"
+        - "fio"
+        - "bankType"
+        - "processMethod"
+        - "currency"
+        - "deviceId"
+        - "isTransferCardNumber"
+        - "isTransferSbp"
+    "SetLimitCardDto":
       "type": "object"
       "properties":
         "cardId":
@@ -2037,10 +2465,64 @@
         - "cardId"
         - "paymentMin"
         - "paymentMax"
+    "CreateCashboxDto":
+      "type": "object"
+      "properties":
+        "title":
+          "type": "string"
+        "url":
+          "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
+        "notificationUrlPayOff":
+          "type": "string"
+        "commissionPayer":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+      "required":
+        - "title"
+        - "url"
+        - "successUrl"
+        - "errorUrl"
+        - "notificationUrlPayments"
+        - "notificationUrlPayOff"
+        - "commissionPayer"
     "Cashbox":
       "type": "object"
       "properties": {}
-    "EditTariffDto":
+    "EditCashboxDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "title":
+          "type": "string"
+        "url":
+          "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
+        "notificationUrlPayOff":
+          "type": "string"
+        "commissionPayer":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+        "apiKey":
+          "type": "string"
+      "required":
+        - "cashboxId"
+    "EditTariffCashboxDto":
       "type": "object"
       "properties":
         "cashboxId":
@@ -2068,10 +2550,88 @@
         - "cashboxId"
         - "tariffId"
         - "type"
+    "CreatePurchaseDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "paymentSystem":
+          "type": "string"
+          "enum":
+            - "bank"
+            - "sbp"
+            - "usdt_trc20"
+        "bankType":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
+            - 16
+            - 17
+            - 18
+            - 19
+            - 20
+            - 21
+            - 22
+            - 23
+            - 24
+            - 25
+            - 26
+            - 27
+            - 28
+            - 29
+            - 30
+            - 31
+            - 32
+            - 33
+            - 34
+            - 35
+            - 36
+            - 37
+            - 38
+            - 39
+            - 40
+            - 41
+            - 42
+            - 43
+        "amount":
+          "type": "number"
+        "orderNumber":
+          "type": "number"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "requisites":
+          "type": "string"
+          "minLength": 11
+      "required":
+        - "cashboxId"
+        - "paymentSystem"
+        - "bankType"
+        - "amount"
+        - "orderNumber"
+        - "currency"
+        - "requisites"
     "Purchase":
       "type": "object"
       "properties": {}
-    "UploadDto":
+    "UploadPurchaseDto":
       "type": "object"
       "properties":
         "comment":
@@ -2087,7 +2647,7 @@
     "Reference":
       "type": "object"
       "properties": {}
-    "FindRequisiteDto":
+    "FindRequisiteTransactionDto":
       "type": "object"
       "properties":
         "recaptha":
@@ -2123,7 +2683,7 @@
     "Transaction":
       "type": "object"
       "properties": {}
-    "MakeDto":
+    "MakeTransactionDto":
       "type": "object"
       "properties":
         "sender":
@@ -2139,7 +2699,47 @@
         - "deviceId"
         - "apiKey"
         - "message"
-    "VerifyDto":
+    "CreateTransactionDto":
+      "type": "object"
+      "properties":
+        "orderNumber":
+          "type": "number"
+        "cashboxId":
+          "type": "number"
+        "paymentSystem":
+          "type": "string"
+          "enum":
+            - "bank"
+            - "sbp"
+            - "usdt_trc20"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "amount":
+          "type": "number"
+        "clientNumber":
+          "type": "string"
+      "required":
+        - "orderNumber"
+        - "cashboxId"
+        - "paymentSystem"
+        - "currency"
+        - "amount"
+        - "clientNumber"
+    "EditTransactionDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
+        "amount":
+          "type": "number"
+      "required":
+        - "transactionId"
+        - "amount"
+    "VerifyTransactionDto":
       "type": "object"
       "properties":
         "file":
@@ -2152,7 +2752,7 @@
       "required":
         - "file"
         - "transactionId"
-    "ApproveDto":
+    "ApproveTransactionDto":
       "type": "object"
       "properties":
         "transactionId":
@@ -2161,7 +2761,68 @@
           "type": "number"
       "required":
         - "transactionId"
-    "EditTariffTransferDto":
+    "CreateUserDto":
+      "type": "object"
+      "properties":
+        "name":
+          "type": "string"
+        "email":
+          "type": "string"
+        "login":
+          "type": "string"
+        "password":
+          "type": "string"
+          "minLength": 3
+          "maxLength": 16
+        "role":
+          "type": "string"
+          "enum":
+            - "operator"
+            - "trader"
+            - "merchant"
+        "permissions":
+          "type": "array"
+          "items":
+            "type": "string"
+        "address":
+          "type": "string"
+        "referrerId":
+          "type": "number"
+          "minimum": 1
+        "referrerPercent":
+          "type": "number"
+      "required":
+        - "name"
+        - "email"
+        - "login"
+        - "password"
+        - "role"
+        - "permissions"
+        - "referrerPercent"
+    "EditUserDto":
+      "type": "object"
+      "properties":
+        "userId":
+          "type": "number"
+        "name":
+          "type": "string"
+        "email":
+          "type": "string"
+        "password":
+          "type": "string"
+          "minLength": 3
+          "maxLength": 16
+        "permissions":
+          "type": "array"
+          "items":
+            "type": "string"
+        "address":
+          "type": "string"
+        "referrerPercent":
+          "type": "number"
+      "required":
+        - "userId"
+    "EditTariffTransferUserDto":
       "type": "object"
       "properties":
         "userId":
@@ -2174,7 +2835,7 @@
           "type": "number"
       "required":
         - "userId"
-    "EditTariffPurchaseDto":
+    "EditTariffPurchaseUserDto":
       "type": "object"
       "properties":
         "userId":
@@ -2189,7 +2850,7 @@
           "type": "number"
       "required":
         - "userId"
-    "SendDto":
+    "SendInternalTransferDto":
       "type": "object"
       "properties":
         "recipientId":
@@ -2207,7 +2868,7 @@
     "InternalTransfer":
       "type": "object"
       "properties": {}
-    "WithdrawDto":
+    "WithdrawInternalTransferDto":
       "type": "object"
       "properties":
         "recipientId":
@@ -2222,6 +2883,16 @@
         - "recipientId"
         - "amount"
         - "isCashbox"
+    "CreateWithdrawalDto":
+      "type": "object"
+      "properties":
+        "address":
+          "type": "string"
+        "amount":
+          "type": "number"
+      "required":
+        - "address"
+        - "amount"
     "Withdrawal":
       "type": "object"
       "properties": {}
