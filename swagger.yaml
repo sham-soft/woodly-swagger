@@ -82,8 +82,10 @@
                   "maxLength": 16
                 "telegramId":
                   "type": "string"
-                "telegramContact":
-                  "type": "string"
+                "telegramContacts":
+                  "type": "array"
+                  "items":
+                    "type": "string"
       "responses":
         "200":
           "description": ""
@@ -140,8 +142,10 @@
           "content":
             "application/json":
               "schema":
-                "type": "object"
-                "properties": {}
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties": {}
       "tags":
         - "Balances"
   "/balance":
@@ -1397,8 +1401,8 @@
   "/transactions/make":
     "patch":
       "operationId": "TransactionsController_makeTransaction"
-      "summary": "Подтверждение платежа чат-ботом (для приложения)"
-      "description": "Отправление данных чат-ботом в сервис, после получения платежа на телефон"
+      "summary": "Подтверждение платежа (для приложения)"
+      "description": "Отправление данных через приложение в сервис, после получения платежа на телефон"
       "parameters": []
       "requestBody":
         "required": true
@@ -1736,6 +1740,104 @@
           "description": ""
       "tags":
         - "Transactions"
+  "/telegram/check":
+    "get":
+      "operationId": "TelegramController_checkTrader"
+      "summary": "Проверка трейдера"
+      "parameters":
+        -
+          "name": "telegramId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "apiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Telegram"
+  "/telegram/check-contact":
+    "get":
+      "operationId": "TelegramController_checkContact"
+      "summary": "Проверка контакта у трейдера"
+      "parameters":
+        -
+          "name": "telegramId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "apiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "telegramContact"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Telegram"
+  "/telegram/info":
+    "get":
+      "operationId": "TelegramController_getTraderInfo"
+      "summary": "Получение информации о трейдере"
+      "parameters":
+        -
+          "name": "telegramId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "apiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+      "tags":
+        - "Telegram"
+  "/telegram/switch-transactions-flag":
+    "patch":
+      "operationId": "TelegramController_switchTransactionsFlag"
+      "summary": "Включение/Отключение флага сделки"
+      "parameters":
+        -
+          "name": "telegramId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "apiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Telegram"
   "/statistics/transactions":
     "get":
       "operationId": "StatisticsController_getTransactions"
@@ -2264,8 +2366,10 @@
           "maxLength": 16
         "telegramId":
           "type": "string"
-        "telegramContact":
-          "type": "string"
+        "telegramContacts":
+          "type": "array"
+          "items":
+            "type": "string"
     "Balance":
       "type": "object"
       "properties": {}
