@@ -1398,6 +1398,58 @@
                 "properties": {}
       "tags":
         - "Transactions"
+  "/transactions/public/cancel":
+    "patch":
+      "operationId": "TransactionsController_publicCancelTransaction"
+      "summary": "Отмена платежа (для экрана оплаты)"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "transactionId":
+                  "type": "number"
+                "orderNumber":
+                  "type": "number"
+                "cashboxId":
+                  "type": "number"
+                "paymentSystem":
+                  "type": "string"
+                  "enum":
+                    - "bank"
+                    - "sbp"
+                    - "usdt_trc20"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "amount":
+                  "type": "number"
+                "clientNumber":
+                  "type": "string"
+              "required":
+                - "transactionId"
+                - "orderNumber"
+                - "cashboxId"
+                - "paymentSystem"
+                - "currency"
+                - "amount"
+                - "clientNumber"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Transactions"
   "/transactions/make":
     "patch":
       "operationId": "TransactionsController_makeTransaction"
@@ -2787,6 +2839,39 @@
     "Transaction":
       "type": "object"
       "properties": {}
+    "CancelTransactionDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
+        "orderNumber":
+          "type": "number"
+        "cashboxId":
+          "type": "number"
+        "paymentSystem":
+          "type": "string"
+          "enum":
+            - "bank"
+            - "sbp"
+            - "usdt_trc20"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "amount":
+          "type": "number"
+        "clientNumber":
+          "type": "string"
+      "required":
+        - "transactionId"
+        - "orderNumber"
+        - "cashboxId"
+        - "paymentSystem"
+        - "currency"
+        - "amount"
+        - "clientNumber"
     "MakeTransactionDto":
       "type": "object"
       "properties":
