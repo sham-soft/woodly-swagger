@@ -58,7 +58,6 @@
             "application/json":
               "schema":
                 "type": "object"
-                "properties": {}
       "tags":
         - "Auth"
   "/auth/profile/edit":
@@ -1295,10 +1294,14 @@
               "properties":
                 "recaptha":
                   "type": "string"
+                "transactionId":
+                  "type": "number"
                 "orderNumber":
                   "type": "number"
                 "cashboxId":
                   "type": "number"
+                "cashboxApiKey":
+                  "type": "string"
                 "paymentSystem":
                   "type": "string"
                   "enum":
@@ -1315,10 +1318,17 @@
                   "type": "number"
                 "clientNumber":
                   "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
               "required":
                 - "recaptha"
                 - "orderNumber"
                 - "cashboxId"
+                - "cashboxApiKey"
                 - "paymentSystem"
                 - "currency"
                 - "amount"
@@ -1363,6 +1373,12 @@
           "schema":
             "type": "number"
         -
+          "name": "cashboxApiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
           "name": "paymentSystem"
           "required": true
           "in": "query"
@@ -1385,6 +1401,24 @@
         -
           "name": "clientNumber"
           "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "successUrl"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "errorUrl"
+          "required": false
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "notificationUrlPayments"
+          "required": false
           "in": "query"
           "schema":
             "type": "string"
@@ -1416,6 +1450,8 @@
                   "type": "number"
                 "cashboxId":
                   "type": "number"
+                "cashboxApiKey":
+                  "type": "string"
                 "paymentSystem":
                   "type": "string"
                   "enum":
@@ -1432,10 +1468,17 @@
                   "type": "number"
                 "clientNumber":
                   "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
               "required":
                 - "transactionId"
                 - "orderNumber"
                 - "cashboxId"
+                - "cashboxApiKey"
                 - "paymentSystem"
                 - "currency"
                 - "amount"
@@ -1609,6 +1652,8 @@
                   "type": "number"
                 "cashboxId":
                   "type": "number"
+                "cashboxApiKey":
+                  "type": "string"
                 "paymentSystem":
                   "type": "string"
                   "enum":
@@ -1625,9 +1670,16 @@
                   "type": "number"
                 "clientNumber":
                   "type": "string"
+                "successUrl":
+                  "type": "string"
+                "errorUrl":
+                  "type": "string"
+                "notificationUrlPayments":
+                  "type": "string"
               "required":
                 - "orderNumber"
                 - "cashboxId"
+                - "cashboxApiKey"
                 - "paymentSystem"
                 - "currency"
                 - "amount"
@@ -2404,9 +2456,6 @@
       "required":
         - "login"
         - "password"
-    "User":
-      "type": "object"
-      "properties": {}
     "ProfileEditAuthDto":
       "type": "object"
       "properties":
@@ -2808,10 +2857,14 @@
       "properties":
         "recaptha":
           "type": "string"
+        "transactionId":
+          "type": "number"
         "orderNumber":
           "type": "number"
         "cashboxId":
           "type": "number"
+        "cashboxApiKey":
+          "type": "string"
         "paymentSystem":
           "type": "string"
           "enum":
@@ -2828,10 +2881,17 @@
           "type": "number"
         "clientNumber":
           "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
       "required":
         - "recaptha"
         - "orderNumber"
         - "cashboxId"
+        - "cashboxApiKey"
         - "paymentSystem"
         - "currency"
         - "amount"
@@ -2848,6 +2908,8 @@
           "type": "number"
         "cashboxId":
           "type": "number"
+        "cashboxApiKey":
+          "type": "string"
         "paymentSystem":
           "type": "string"
           "enum":
@@ -2864,10 +2926,17 @@
           "type": "number"
         "clientNumber":
           "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
       "required":
         - "transactionId"
         - "orderNumber"
         - "cashboxId"
+        - "cashboxApiKey"
         - "paymentSystem"
         - "currency"
         - "amount"
@@ -2895,6 +2964,8 @@
           "type": "number"
         "cashboxId":
           "type": "number"
+        "cashboxApiKey":
+          "type": "string"
         "paymentSystem":
           "type": "string"
           "enum":
@@ -2911,9 +2982,16 @@
           "type": "number"
         "clientNumber":
           "type": "string"
+        "successUrl":
+          "type": "string"
+        "errorUrl":
+          "type": "string"
+        "notificationUrlPayments":
+          "type": "string"
       "required":
         - "orderNumber"
         - "cashboxId"
+        - "cashboxApiKey"
         - "paymentSystem"
         - "currency"
         - "amount"
@@ -2988,6 +3066,9 @@
         - "role"
         - "permissions"
         - "referrerPercent"
+    "User":
+      "type": "object"
+      "properties": {}
     "EditUserDto":
       "type": "object"
       "properties":
