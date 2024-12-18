@@ -640,6 +640,26 @@
           "description": ""
       "tags":
         - "Cards"
+  "/cashboxes/public/balance":
+    "get":
+      "operationId": "CashboxesController_getBalance"
+      "summary": "Получение баланса кассы (публичный)"
+      "parameters":
+        -
+          "name": "apiKey"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "number"
+      "tags":
+        - "Cashboxes"
   "/cashboxes":
     "get":
       "operationId": "CashboxesController_getCashboxes"
@@ -871,6 +891,68 @@
           "description": ""
       "tags":
         - "Messages"
+  "/purchases/public/create":
+    "post":
+      "operationId": "PurchasesController_publicCreatePurchase"
+      "summary": "Создание выплаты (публичный)"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "cashboxId":
+                  "type": "number"
+                "hash":
+                  "type": "string"
+              "required":
+                - "cashboxId"
+                - "hash"
+      "responses":
+        "201":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Purchases"
+  "/purchases/public/check":
+    "get":
+      "operationId": "PurchasesController_checkPurchase"
+      "summary": "Проверка выплаты (публичный)"
+      "parameters":
+        -
+          "name": "cashboxId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+        -
+          "name": "hash"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "string"
+        -
+          "name": "purchaseId"
+          "required": true
+          "in": "query"
+          "schema":
+            "type": "number"
+      "responses":
+        "200":
+          "description": ""
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties": {}
+      "tags":
+        - "Purchases"
   "/purchases":
     "get":
       "operationId": "PurchasesController_getPurchases"
@@ -1012,7 +1094,7 @@
         - "Purchases"
   "/purchases/create":
     "post":
-      "operationId": "PurchasesController_createCard"
+      "operationId": "PurchasesController_createPurchase"
       "summary": "Создание выплаты"
       "parameters": []
       "requestBody":
@@ -1280,7 +1362,7 @@
                 "properties": {}
       "tags":
         - "References"
-  "/transactions/find-requisite":
+  "/transactions/public/find-requisite":
     "post":
       "operationId": "TransactionsController_findRequisite"
       "summary": "Создание платежа и получение реквизитов (для экрана оплаты)"
@@ -1294,45 +1376,16 @@
               "properties":
                 "recaptha":
                   "type": "string"
-                "transactionId":
-                  "type": "number"
-                "orderNumber":
-                  "type": "number"
                 "cashboxId":
                   "type": "number"
-                "cashboxApiKey":
+                "hash":
                   "type": "string"
-                "paymentSystem":
-                  "type": "string"
-                  "enum":
-                    - "bank"
-                    - "sbp"
-                    - "usdt_trc20"
-                "currency":
-                  "type": "string"
-                  "enum":
-                    - "rub"
-                    - "kzt"
-                    - "rub-trx"
-                "amount":
+                "transactionId":
                   "type": "number"
-                "clientNumber":
-                  "type": "string"
-                "successUrl":
-                  "type": "string"
-                "errorUrl":
-                  "type": "string"
-                "notificationUrlPayments":
-                  "type": "string"
               "required":
                 - "recaptha"
-                - "orderNumber"
                 - "cashboxId"
-                - "cashboxApiKey"
-                - "paymentSystem"
-                - "currency"
-                - "amount"
-                - "clientNumber"
+                - "hash"
       "responses":
         "201":
           "description": ""
@@ -1343,17 +1396,11 @@
                 "properties": {}
       "tags":
         - "Transactions"
-  "/transactions/check":
+  "/transactions/public/check":
     "get":
       "operationId": "TransactionsController_checkTransaction"
       "summary": "Проверка платежа (для экрана оплаты)"
       "parameters":
-        -
-          "name": "orderNumber"
-          "required": true
-          "in": "query"
-          "schema":
-            "type": "number"
         -
           "name": "cashboxId"
           "required": true
@@ -1361,67 +1408,17 @@
           "schema":
             "type": "number"
         -
-          "name": "amount"
+          "name": "hash"
           "required": true
           "in": "query"
           "schema":
-            "type": "number"
+            "type": "string"
         -
           "name": "transactionId"
           "required": true
           "in": "query"
           "schema":
             "type": "number"
-        -
-          "name": "cashboxApiKey"
-          "required": true
-          "in": "query"
-          "schema":
-            "type": "string"
-        -
-          "name": "paymentSystem"
-          "required": true
-          "in": "query"
-          "schema":
-            "enum":
-              - "bank"
-              - "sbp"
-              - "usdt_trc20"
-            "type": "string"
-        -
-          "name": "currency"
-          "required": true
-          "in": "query"
-          "schema":
-            "enum":
-              - "rub"
-              - "kzt"
-              - "rub-trx"
-            "type": "string"
-        -
-          "name": "clientNumber"
-          "required": true
-          "in": "query"
-          "schema":
-            "type": "string"
-        -
-          "name": "successUrl"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "string"
-        -
-          "name": "errorUrl"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "string"
-        -
-          "name": "notificationUrlPayments"
-          "required": false
-          "in": "query"
-          "schema":
-            "type": "string"
       "responses":
         "200":
           "description": ""
@@ -1444,45 +1441,16 @@
             "schema":
               "type": "object"
               "properties":
-                "transactionId":
-                  "type": "number"
-                "orderNumber":
-                  "type": "number"
                 "cashboxId":
                   "type": "number"
-                "cashboxApiKey":
+                "hash":
                   "type": "string"
-                "paymentSystem":
-                  "type": "string"
-                  "enum":
-                    - "bank"
-                    - "sbp"
-                    - "usdt_trc20"
-                "currency":
-                  "type": "string"
-                  "enum":
-                    - "rub"
-                    - "kzt"
-                    - "rub-trx"
-                "amount":
+                "transactionId":
                   "type": "number"
-                "clientNumber":
-                  "type": "string"
-                "successUrl":
-                  "type": "string"
-                "errorUrl":
-                  "type": "string"
-                "notificationUrlPayments":
-                  "type": "string"
               "required":
-                - "transactionId"
-                - "orderNumber"
                 - "cashboxId"
-                - "cashboxApiKey"
-                - "paymentSystem"
-                - "currency"
-                - "amount"
-                - "clientNumber"
+                - "hash"
+                - "transactionId"
       "responses":
         "200":
           "description": ""
@@ -1652,8 +1620,6 @@
                   "type": "number"
                 "cashboxId":
                   "type": "number"
-                "cashboxApiKey":
-                  "type": "string"
                 "paymentSystem":
                   "type": "string"
                   "enum":
@@ -1670,16 +1636,15 @@
                   "type": "number"
                 "clientNumber":
                   "type": "string"
+                "url":
+                  "type": "string"
                 "successUrl":
                   "type": "string"
                 "errorUrl":
                   "type": "string"
-                "notificationUrlPayments":
-                  "type": "string"
               "required":
                 - "orderNumber"
                 - "cashboxId"
-                - "cashboxApiKey"
                 - "paymentSystem"
                 - "currency"
                 - "amount"
@@ -2755,6 +2720,19 @@
         - "cashboxId"
         - "tariffId"
         - "type"
+    "PublicCreatePurchaseDto":
+      "type": "object"
+      "properties":
+        "cashboxId":
+          "type": "number"
+        "hash":
+          "type": "string"
+      "required":
+        - "cashboxId"
+        - "hash"
+    "Purchase":
+      "type": "object"
+      "properties": {}
     "CreatePurchaseDto":
       "type": "object"
       "properties":
@@ -2833,9 +2811,6 @@
         - "orderNumber"
         - "currency"
         - "requisites"
-    "Purchase":
-      "type": "object"
-      "properties": {}
     "UploadPurchaseDto":
       "type": "object"
       "properties":
@@ -2857,90 +2832,32 @@
       "properties":
         "recaptha":
           "type": "string"
-        "transactionId":
-          "type": "number"
-        "orderNumber":
-          "type": "number"
         "cashboxId":
           "type": "number"
-        "cashboxApiKey":
+        "hash":
           "type": "string"
-        "paymentSystem":
-          "type": "string"
-          "enum":
-            - "bank"
-            - "sbp"
-            - "usdt_trc20"
-        "currency":
-          "type": "string"
-          "enum":
-            - "rub"
-            - "kzt"
-            - "rub-trx"
-        "amount":
+        "transactionId":
           "type": "number"
-        "clientNumber":
-          "type": "string"
-        "successUrl":
-          "type": "string"
-        "errorUrl":
-          "type": "string"
-        "notificationUrlPayments":
-          "type": "string"
       "required":
         - "recaptha"
-        - "orderNumber"
         - "cashboxId"
-        - "cashboxApiKey"
-        - "paymentSystem"
-        - "currency"
-        - "amount"
-        - "clientNumber"
+        - "hash"
     "Transaction":
       "type": "object"
       "properties": {}
     "CancelTransactionDto":
       "type": "object"
       "properties":
-        "transactionId":
-          "type": "number"
-        "orderNumber":
-          "type": "number"
         "cashboxId":
           "type": "number"
-        "cashboxApiKey":
+        "hash":
           "type": "string"
-        "paymentSystem":
-          "type": "string"
-          "enum":
-            - "bank"
-            - "sbp"
-            - "usdt_trc20"
-        "currency":
-          "type": "string"
-          "enum":
-            - "rub"
-            - "kzt"
-            - "rub-trx"
-        "amount":
+        "transactionId":
           "type": "number"
-        "clientNumber":
-          "type": "string"
-        "successUrl":
-          "type": "string"
-        "errorUrl":
-          "type": "string"
-        "notificationUrlPayments":
-          "type": "string"
       "required":
-        - "transactionId"
-        - "orderNumber"
         - "cashboxId"
-        - "cashboxApiKey"
-        - "paymentSystem"
-        - "currency"
-        - "amount"
-        - "clientNumber"
+        - "hash"
+        - "transactionId"
     "MakeTransactionDto":
       "type": "object"
       "properties":
@@ -2964,8 +2881,6 @@
           "type": "number"
         "cashboxId":
           "type": "number"
-        "cashboxApiKey":
-          "type": "string"
         "paymentSystem":
           "type": "string"
           "enum":
@@ -2982,16 +2897,15 @@
           "type": "number"
         "clientNumber":
           "type": "string"
+        "url":
+          "type": "string"
         "successUrl":
           "type": "string"
         "errorUrl":
           "type": "string"
-        "notificationUrlPayments":
-          "type": "string"
       "required":
         - "orderNumber"
         - "cashboxId"
-        - "cashboxApiKey"
         - "paymentSystem"
         - "currency"
         - "amount"
