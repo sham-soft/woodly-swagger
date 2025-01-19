@@ -1171,6 +1171,8 @@
                 "requisites":
                   "type": "string"
                   "minLength": 11
+                "callbackUrl":
+                  "type": "string"
               "required":
                 - "cashboxId"
                 - "paymentSystem"
@@ -1321,6 +1323,54 @@
             "application/json":
               "schema":
                 "type": "number"
+      "tags":
+        - "Purchases"
+  "/purchases/send-callback":
+    "patch":
+      "operationId": "PurchasesController_sendCallback"
+      "summary": "Отправить колбэк"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "purchaseId":
+                  "type": "number"
+                "cashboxId":
+                  "type": "number"
+                "orderNumber":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "status":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                "callbackUrl":
+                  "type": "string"
+              "required":
+                - "purchaseId"
+                - "cashboxId"
+                - "orderNumber"
+                - "amount"
+                - "currency"
+                - "status"
+                - "callbackUrl"
+      "responses":
+        "200":
+          "description": ""
       "tags":
         - "Purchases"
   "/references":
@@ -1642,6 +1692,8 @@
                   "type": "string"
                 "errorUrl":
                   "type": "string"
+                "callbackUrl":
+                  "type": "string"
               "required":
                 - "orderNumber"
                 - "cashboxId"
@@ -1804,6 +1856,55 @@
               - "4"
               - "5"
             "type": "string"
+      "responses":
+        "200":
+          "description": ""
+      "tags":
+        - "Transactions"
+  "/transactions/send-callback":
+    "patch":
+      "operationId": "TransactionsController_sendCallback"
+      "summary": "Отправить колбэк"
+      "parameters": []
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "transactionId":
+                  "type": "number"
+                "cashboxId":
+                  "type": "number"
+                "orderNumber":
+                  "type": "number"
+                "amount":
+                  "type": "number"
+                "currency":
+                  "type": "string"
+                  "enum":
+                    - "rub"
+                    - "kzt"
+                    - "rub-trx"
+                "status":
+                  "type": "number"
+                  "enum":
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                "callbackUrl":
+                  "type": "string"
+              "required":
+                - "transactionId"
+                - "cashboxId"
+                - "orderNumber"
+                - "amount"
+                - "currency"
+                - "status"
+                - "callbackUrl"
       "responses":
         "200":
           "description": ""
@@ -2803,6 +2904,8 @@
         "requisites":
           "type": "string"
           "minLength": 11
+        "callbackUrl":
+          "type": "string"
       "required":
         - "cashboxId"
         - "paymentSystem"
@@ -2824,6 +2927,40 @@
       "required":
         - "purchaseId"
         - "file"
+    "SendCallbackPurchaseDto":
+      "type": "object"
+      "properties":
+        "purchaseId":
+          "type": "number"
+        "cashboxId":
+          "type": "number"
+        "orderNumber":
+          "type": "number"
+        "amount":
+          "type": "number"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "status":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+        "callbackUrl":
+          "type": "string"
+      "required":
+        - "purchaseId"
+        - "cashboxId"
+        - "orderNumber"
+        - "amount"
+        - "currency"
+        - "status"
+        - "callbackUrl"
     "Reference":
       "type": "object"
       "properties": {}
@@ -2903,6 +3040,8 @@
           "type": "string"
         "errorUrl":
           "type": "string"
+        "callbackUrl":
+          "type": "string"
       "required":
         - "orderNumber"
         - "cashboxId"
@@ -2942,6 +3081,41 @@
           "type": "number"
       "required":
         - "transactionId"
+    "SendCallbackTransactionDto":
+      "type": "object"
+      "properties":
+        "transactionId":
+          "type": "number"
+        "cashboxId":
+          "type": "number"
+        "orderNumber":
+          "type": "number"
+        "amount":
+          "type": "number"
+        "currency":
+          "type": "string"
+          "enum":
+            - "rub"
+            - "kzt"
+            - "rub-trx"
+        "status":
+          "type": "number"
+          "enum":
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        "callbackUrl":
+          "type": "string"
+      "required":
+        - "transactionId"
+        - "cashboxId"
+        - "orderNumber"
+        - "amount"
+        - "currency"
+        - "status"
+        - "callbackUrl"
     "CreateUserDto":
       "type": "object"
       "properties":
